@@ -420,7 +420,7 @@ Sec-WebSocket-Accept: lluo2AIajFdtzn73RnauhvkCOvU=
 				<section>
 					<h1>Sec-WebSocket-Key</h1>
 					<ul>
-						<li class="fragment">base64(sha1(Sec-WebSocket-Key + GUID)</li>
+						<li class="fragment">base64(sha1(Sec-WebSocket-Key + GUID))</li>
 						<li class="fragment">How is this secure?</li>
 						<li class="fragment">It's not</li>
 					</ul>
@@ -464,6 +464,7 @@ var ws = new WebSocket("ws://localhost:80/app", "custom.protocol");
 					</ul>
 					<aside class="notes">
 						The connection will only be established if the server reports that it has selected one of these subprotocols.
+						Internet Assigned Numbers Authority.
 					</aside>
 				</section>
 
