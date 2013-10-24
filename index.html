@@ -768,9 +768,9 @@ var ws = new WebSocket("ws://localhost:80/app");
 				<section>
 					<h1>Extensions</h1>
 					<ul>
-						<li>Extend the WebSocket protocol</li>
-						<li>Can add new op codes and data fields to the frame</li>
-						<li>Browser and server must support</li>
+						<li class="fragment">Extend the WebSocket protocol</li>
+						<li class="fragment">Can add new op codes and data fields to the frame</li>
+						<li class="fragment">Browser and server must support</li>
 					</ul>
 					<aside class="notes">
 					</aside>
@@ -778,9 +778,9 @@ var ws = new WebSocket("ws://localhost:80/app");
 
 				<section>
 					<h1>Extensions: mux</h1>
-					<p>Sec-WebSocket-Extensions: <a href="http://tools.ietf.org/html/draft-ietf-hybi-websocket-multiplexing-01">mux</a></p>
 					<ul>
-						<li>Separate logical WebSocket connections share a TCP connection</li>
+						<li class="fragment">Share a TCP connection</li>
+						<li class="fragment">Sec-WebSocket-Extensions: <a href="http://tools.ietf.org/html/draft-ietf-hybi-websocket-multiplexing-01">mux</a></li>
 					</ul>
 					<aside class="notes">
 					With this extension, one TCP connection can provide multiple virtual 
@@ -793,7 +793,9 @@ var ws = new WebSocket("ws://localhost:80/app");
 
 				<section>
 					<h1>Extensions: compression</h1>
-					<p>Sec-WebSocket-Extensions: x-webkit-deflate-frame</p>
+					<ul>
+						<li class="fragment">Sec-WebSocket-Extensions: x-webkit-deflate-frame</li>
+					</ul>
 					<aside class="notes">
 						Chrome sends this extension which will be used if the backend server supports it.
 					</aside>
@@ -801,7 +803,10 @@ var ws = new WebSocket("ws://localhost:80/app");
 
 				<section>
 					<h1>Proxies</h1>
-					<p>Revers proxy servers</p>
+					<ul>
+						<li class="fragment">Might not understand WebSocket</li>
+						<li class="fragment">Might not handle Upgrade requests</li>
+					</ul>
 					<aside class="notes">
 						Most proxies are not equipped to handle the 'upgraded' connection and either drop the connection because of an 'illegal' request or don't 
 						forward the upgrade header and the application isn't able to process the request.
@@ -810,8 +815,10 @@ var ws = new WebSocket("ws://localhost:80/app");
 
 				<section>
 					<h1>Fallbacks/Polyfills</h1>
-					<p>SockJS</p>
-					<p>Socket.io</p>
+					<ul>
+						<li class="fragment">SockJS</li>
+						<li class="fragment">socket.io</li>
+					</ul>
 					<aside class="notes">
 					</aside>
 				</section>
@@ -822,21 +829,31 @@ var ws = new WebSocket("ws://localhost:80/app");
 
 				<section>
 					<h1>Multiplex WebSockets</h1>
-					<p>Multiple logic WebSocket connections over same physical connection</p>
+					<ul>
+						<li class="fragment">Multiple logic WebSocket connections over same physical connection</li>
+					</ul>
 					<aside class="notes">
 					  MUX multiple logical websocket connections over same connection.
 					</aside>
 				</section>
 
 				<section>
-					<h1>HTTP 2.0/SPDY and WebSocket</h1>
+					<h1>HTTP/2.0 and WebSocket</h1>
+					<ul>
+						<li class="fragment">Faster handshake</li>
+						<li class="fragment">Google are working on multiplexing WebSocket over SPDY</li>
+					</ul>
 					<aside class="notes">
 					  Google are working on multiplexing WebSockets over SPDY. Will this added overhead to the protocol?
 					</aside>
 				</section>
 
 				<section>
-					<h1>HTTP 2.0/SPDY and SSE</h1>
+					<h1>HTTP/2.0 and SSE</h1>
+					<ul>
+						<li class="fragment">Back to pure HTTP using SSE for server push</li>
+						<li class="fragment">Use normal REST for sending</li>
+					</ul>
 					<aside class="notes">
 					  Perhaps with HTTP2.0 and SSE we could go back to using pure HTTP and use SSE for server push and normal REST for sending?
 					</aside>
