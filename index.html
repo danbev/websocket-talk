@@ -4,10 +4,10 @@
 	<head>
 		<meta charset="utf-8">
 
-		<title>reveal.js - The HTML Presentation Framework</title>
+		<title>Introduction to WebSockets</title>
 
-		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
-		<meta name="author" content="Hakim El Hattab">
+		<meta name="description" content="Introduction to WebSockets">
+		<meta name="author" content="Daniel Bevenius">
 
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -15,7 +15,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 		<link rel="stylesheet" href="css/reveal.min.css">
-		<link rel="stylesheet" href="css/theme/default.css" id="theme">
+		<link rel="stylesheet" href="css/theme/aerogear.css" id="theme">
 
 		<!-- For syntax highlighting -->
 		<link rel="stylesheet" href="lib/css/zenburn.css">
@@ -36,307 +36,814 @@
 
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
-
 				<section>
-					<h1>Reveal.js</h1>
-					<h3>HTML Presentations Made Easy</h3>
+					<h1>WebSocket</h1>
 					<p>
-						<small>Created by <a href="http://hakim.se">Hakim El Hattab</a> / <a href="http://twitter.com/hakimel">@hakimel</a></small>
+						<small><a href="http://dbevenius.org">Daniel Bevenius</a> / <a href="http://twitter.com/">@dbevenius</a></small>
 					</p>
 				</section>
 
 				<section>
-					<h2>Heads Up</h2>
-					<p>
-						reveal.js is a framework for easily creating beautiful presentations using HTML. You'll need a browser with
-						support for CSS 3D transforms to see it in its full glory.
-					</p>
-
+					<h1>Why WebSockets?</h1>
 					<aside class="notes">
-						Oh hey, these are some notes. They'll be hidden in your presentation, but you can see them if you open the speaker notes window (hit 's' on your keyboard).
+						Let's look into how we arrived to where we are today...
 					</aside>
 				</section>
 
-				<!-- Example of nested vertical slides -->
 				<section>
-					<section>
-						<h2>Vertical Slides</h2>
-						<p>
-							Slides can be nested inside of other slides,
-							try pressing <a href="#" class="navigate-down">down</a>.
-						</p>
-						<a href="#" class="image navigate-down">
-							<img width="178" height="238" src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Down arrow">
-						</a>
-					</section>
-					<section>
-						<h2>Basement Level 1</h2>
-						<p>Press down or up to navigate.</p>
-					</section>
-					<section>
-						<h2>Basement Level 2</h2>
-						<p>Cornify</p>
-						<a class="test" href="http://cornify.com">
-							<img width="280" height="326" src="https://s3.amazonaws.com/hakim-static/reveal-js/cornify.gif" alt="Unicorn">
-						</a>
-					</section>
-					<section>
-						<h2>Basement Level 3</h2>
-						<p>That's it, time to go back up.</p>
-						<a href="#/2" class="image">
-							<img width="178" height="238" src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Up arrow" style="-webkit-transform: rotate(180deg);">
-						</a>
-					</section>
-				</section>
-
-				<section>
-					<h2>Point of View</h2>
-					<p>
-						Press <strong>ESC</strong> to enter the slide overview. Hold down alt and click on any element to zoom in on it using <a href="http://lab.hakim.se/zoom-js">zoom.js</a>. Alt + click anywhere to zoom back out.
-					</p>
-				</section>
-
-				<section>
-					<h2>rvl.io</h2>
-					<p>
-						If you don't like writing slides in HTML you can use the online editor <a href="http://www.rvl.io" target="_blank">rvl.io</a>.
-					</p>
-				</section>
-
-				<section>
-					<h2>Works in Mobile Safari</h2>
-					<p>
-						Try it out! You can swipe through the slides and pinch your way to the overview.
-					</p>
-				</section>
-
-				<section>
-					<h2>Marvelous Unordered List</h2>
+					<h1>HTTP 0.9</h1>
 					<ul>
-						<li>No order here</li>
-						<li>Or here</li>
-						<li>Or here</li>
-						<li>Or here</li>
+						<li class="fragment">1991</li>
+						<li class="fragment">ASCII protocol, running over a TCP/IP link</li>
+						<li class="fragment">Request/Response</li>
+						<li class="fragment">Response limited to hypertext</li>
+						<li class="fragment">Connection closed</li>
+					</ul>
+					<aside class="notes">
+						HTTP/0.9 get a single hypertext document - no headers or metadata.
+					</aside>
+				</section>
+
+				<section>
+					<h1>HTTP 1.0</h1>
+					<ul>
+						<li class="fragment">1996 RFC-1945</li>
+						<li class="fragment">Headers</li>
+						<li class="fragment">Response not limited to hypertext</li>
+						<li class="fragment">Connection closed</li>
+					</ul>
+					<aside class="notes">
+						The need for more advanced responses, images, content negotiation.
+						content encoding, character set support, multi-part types, authorization, caching, proxy behaviors, date formats, and more
+						Requiring a new TCP connection per request imposes a significant performance penalty on HTTP 1.0
+						(HTTP/1.0 -> new connection for every request unless 'Connection: keep-alive' is sent. Not part of the 1.0 spec)
+					</aside>
+				</section>
+
+				<section>
+					<h1>HTTP 1.1</h1>
+					<ul>
+						<li class="fragment">RFC-2068 1997</li>
+						<li class="fragment">RFC-2016 1999</li>
+						<li class="fragment">Keep-alive</li>
+						<li class="fragment">Chunked encoding transfers</li>
+						<li class="fragment">Still half duplex</li>
+					</ul>
+					<aside class="notes">
+						keepalive allows us to reuse the existing TCP connection for multiple requests to the same host and deliver a much faster end-user experience
+						keepalive is the default in 1.1 but was backported to 1.0 by using 'Connection: Keep-Alive'
+						Official spec in 1997 and then a number of improvements in 1999.
+						There is pipelining but that introduces a number of issues.
+					</aside>
+				</section>
+
+				<section>
+					<h1>Simplex</h1>
+					<p>
+						<img width="460" height="276" src="img/one-way-street.jpg" alt="One way street">
+					</p>
+					<ul>
+						<li class="fragment">TV</li>
+						<li class="fragment">Radio</li>
+					</ul>
+					<aside class="notes">
+						Broadcast, examples tv, radio.
+					</aside>
+				</section>
+
+				<section>
+					<h1>Half-Duplex</h1>
+					<p>
+						<img width="460" height="276" src="img/one-way-bridge.jpg" alt="One-way bridge">
+					</p>
+					<ul>
+						<li class="fragment">Walkie-talkie</li>
+					</ul>
+					<aside class="notes">
+					Send one direction at a time. Walkie-talkie communication. 
+					HTTP 1.1 is like this (unless pipelineing is used)
+					</aside>
+				</section>
+
+				<section>
+					<h1>Full-Duplex</h1>
+					<p>
+						<img width="460" height="276" src="img/two-way-bridge.jpg" alt="Two-way bridge">
+					</p>
+					<ul>
+						<li class="fragment">Telefon</li>
+					</ul>
+					<aside class="notes">
+						Send in both directions at the same time. WebSocket
+					</aside>
+				</section>
+
+				<section>
+					<h1>HTTP</h1>
+					<ul>
+						<li class="fragment">Half duplex</li>
+						<li class="fragment">Request from client</li>
+						<li class="fragment">Response from server</li>
+						<li class="fragment">Has worked well</li>
+					</ul>
+					<aside class="notes">
+						* Just trying to clarify that communication is initiated by the client always!
+						* This worked well for the types of apps that the web was "intended" for -> Document retreival.
+						* We are no longer building web pages, we are building web applications.
+						* One transfer per connection (half duplex)
+						* At most 6 parallel connections to one hostname, with domain sharding 15+.
+					</aside>
+				</section>
+
+				<section>
+					<h1>More advanced apps</h1>
+					<ul>
+						<li class="fragment">chat/messaging</li>
+						<li class="fragment">games</li>
+					</ul>
+					<aside class="notes">
+						There are certain types of application functionality that do not fit in nicely with the request/response paradigm of the web.
+						These types of applications require updates to be sent from the server side to the client.
+						Notice that we are talking about bi-directional communication. A stock ticker or news feed could use web socket but 
+						it could also use plain HTTP technology like Server Sent Events (SSE).
+					</aside>
+				</section>
+
+				<section>
+					<h1>These apps exist today</h1>
+					<ul>
+						<li class="fragment">How do they work?</li>
+					</ul>
+					<aside class="notes">
+						chats/messaging and games, etc are present on the web today, so how do they work if they are restricted with the reqeust/response model of
+						HTTP?
+					</aside>
+				</section>
+
+				<section>
+					<p>
+						<img width="460" height="276" src="img/comet.jpg" alt="Comet/Ajax">
+					</p>
+					<aside class="notes">
+						Comet is a web application model in which a long-held HTTP request allows a web server to push data to a browser, without the browser explicitly requesting it
+						Is also know as Ajax Push, Reverse Ajax, Two-way-web, HTTP Streaming.
+						The new term was a play on Ajax (Ajax and Comet both being household cleaners common in the USA).
+
+						(Asynchronous JavaScript and XML)
+						With Ajax, web applications can send data to, and retrieve data from, a server asynchronously (in the background) without interfering with the display (no page reload).
+					</aside>
+				</section>
+
+				<section>
+					<h1>HTTP "Short" Polling</h1>
+					<ul>
+						<li class="fragment">Polls server using an interval</li>
+						<li class="fragment">Might poll unnessesariarly</li>
+						<li class="fragment">More network trafic</li>
+						<li class="fragment">Server resources involved to handle each poll</li>
+					</ul>
+					<aside class="notes">
+						* Actually not part of Comet as it only regards "long" polling or streaming solutions.
+						* Continous requests for data from the client to server. 
+						* The server can queue up data/events which are delivered to the client when it polls.
+						* Really just used Ajax with a poll interval.
+						* Can be wasteful as there might not be any data to retreive. 
+							* Still HTTP trafic on the wire (headers!)
+							* Server resources are also involved.
+					</aside>
+				</section>
+
+				<section>
+					<h1>HTTP Long polling</h1>
+					<ul>
+						<li class="fragment">Server wait with response until it's available</li>
+						<li class="fragment">Server responds when data is available</li>
+						<li class="fragment">Client polls again</li>
+					</ul>
+					<aside class="notes">
+						The server holds the connection open and when it has data it will respond with
+						that data and then close the connection. The client then reconnects.
+					</aside>
+				</section>
+
+				<section>
+					<h1>HTTP Streaming</h1>
+					<ul>
+						<li class="fragment">Maintains an open connection to server</li>
+						<li class="fragment">HTTP/1.1 chunks</li>
+					</ul>
+					<aside class="notes">
+					</aside>
+				</section>
+
+				<section>
+					<h1>Problems with Comet</h1>
+					<ul>
+						<li class="fragment">New connection to poll</li>
+						<li class="fragment">Header overhead</li>
+						<li class="fragment">Server resources for processing</li>
+						<li class="fragment">Latency. Data not be delivered until next poll</li>
+					</ul>
+					<aside class="notes">
+						* multiple connections required.
+						* a full HTTP Request/Response is being which means all of the headers.
+						* More data might be available when polling but will not be available to clients until the next request(poll)
+					</aside>
+				</section>
+
+				<section>
+					<h1>Server Sent Events</h1>
+					<ul>
+						<li class="fragment">HTTP</li>
+						<li class="fragment">Client initiated</li>
+						<li class="fragment">Event based</li>
+						<li class="fragment">Native to browser (where supported)</li>
+						<li class="fragment">Polyfill available</li>
+						<li class="fragment">Alternative if only server -> client needed</li>
+					</ul>
+					<aside class="notes">
+						An option that exist today is also Server Sent Events which are native to browsers that support them and use HTTP/1.1.
+						This allows for unidirectional communication of  data/events from the server. The impl will take care for reconnects.
+					    Might be nice if there is no need to send back to the server, like a news feed, stock ticker.	
+						Just to make people aware that the don't have to use WebSocket if a simple solution is available.
+						var source = new EventSource('/newsfeed');
+						source.addEventListener('message', function(e) {
+						  console.log(e.data);
+						}, false);
+						If the URL passed to the EventSource constructor is an absolute URL, its origin (scheme, domain, port) must match that of the calling page.
+						You could have a servlet that serves 'newsfeed'.
+					</aside>
+				</section>
+
+				<section>
+					<h1>What do we want?</h1>
+					<ul>
+						<li class="fragment">Full-Duplex</li>
+						<li class="fragment">Less overhead</li>
+						<li class="fragment">Should work with current infrastructure</li>
 					</ul>
 				</section>
 
 				<section>
-					<h2>Fantastic Ordered List</h2>
-					<ol>
-						<li>One is smaller than...</li>
-						<li>Two is smaller than...</li>
-						<li>Three!</li>
-					</ol>
-				</section>
-
-				<section data-markdown>
-					<script type="text/template">
-						## Markdown support
-
-						For those of you who like that sort of thing. Instructions and a bit more info available [here](https://github.com/hakimel/reveal.js#markdown).
-
-							<section data-markdown>
-							  ## Markdown support
-
-							  For those of you who like that sort of thing.
-							  Instructions and a bit more info available [here](https://github.com/hakimel/reveal.js#markdown).
-							</section>
-					</script>
-				</section>
-
-				<section id="transitions">
-					<h2>Transition Styles</h2>
-					<p>
-						You can select from different transitions, like: <br>
-						<a href="?transition=cube#/transitions">Cube</a> -
-						<a href="?transition=page#/transitions">Page</a> -
-						<a href="?transition=concave#/transitions">Concave</a> -
-						<a href="?transition=zoom#/transitions">Zoom</a> -
-						<a href="?transition=linear#/transitions">Linear</a> -
-						<a href="?transition=fade#/transitions">Fade</a> -
-						<a href="?transition=none#/transitions">None</a> -
-						<a href="?#/transitions">Default</a>
-					</p>
-				</section>
-
-				<section id="themes">
-					<h2>Themes</h2>
-					<p>
-						Reveal.js comes with a few themes built in: <br>
-						<a href="?theme=sky#/themes">Sky</a> -
-						<a href="?theme=beige#/themes">Beige</a> -
-						<a href="?theme=simple#/themes">Simple</a> -
-						<a href="?theme=serif#/themes">Serif</a> -
-						<a href="?theme=night#/themes">Night</a> -
-						<a href="?#/themes">Default</a>
-					</p>
-					<p>
-						<small>
-							* Theme demos are loaded after the presentation which leads to flicker. In production you should load your theme in the <code>&lt;head&gt;</code> using a <code>&lt;link&gt;</code>.
-						</small>
-					</p>
-				</section>
-
-				<section>
-					<section data-state="alert">
-						<h2>Global State</h2>
-						<p>
-							Set <code>data-state="something"</code> on a slide and <code>"something"</code>
-							will be added as a class to the document element when the slide is open. This lets you
-							apply broader style changes, like switching the background.
-						</p>
-						<a href="#" class="image navigate-down">
-							<img width="178" height="238" src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Down arrow">
-						</a>
-					</section>
-					<section data-state="blackout">
-						<h2>"blackout"</h2>
-						<a href="#" class="image navigate-down">
-							<img width="178" height="238" src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Down arrow">
-						</a>
-					</section>
-					<section data-state="soothe">
-						<h2>"soothe"</h2>
-						<a href="#" class="image navigate-next">
-							<img width="178" height="238" src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Up arrow" style="-webkit-transform: rotate(-90deg);">
-						</a>
-					</section>
-				</section>
-
-				<section data-state="customevent">
-					<h2>Custom Events</h2>
-					<p>
-						Additionally custom events can be triggered on a per slide basis by binding to the <code>data-state</code> name.
-					</p>
-					<pre><code contenteditable style="font-size: 18px; margin-top: 20px;">Reveal.addEventListener( 'customevent', function() {
-	console.log( '"customevent" has fired' );
-} );
-					</code></pre>
-				</section>
-
-				<section>
-					<h2>Clever Quotes</h2>
-					<p>
-						These guys come in two forms, inline: <q cite="http://searchservervirtualization.techtarget.com/definition/Our-Favorite-Technology-Quotations">
-						The nice thing about standards is that there are so many to choose from</q> and block:
-					</p>
+					<h1>Solution: WebSocket</h1>
 					<blockquote cite="http://searchservervirtualization.techtarget.com/definition/Our-Favorite-Technology-Quotations">
-						For years there has been a theory that millions of monkeys typing at random on millions of typewriters would
-						reproduce the entire works of Shakespeare. The Internet has proven this theory to be untrue.
+						&ldquo;two-way communication with servers that does not rely on opening multiple HTTP connections&rdquo;
 					</blockquote>
+					<aside class="notes">
+						It's also designed in such a way that its servers can share a port with HTTP servers, by having its handshake be a valid HTTP Upgrade request.
+					</aside>
 				</section>
 
 				<section>
-					<h2>Pretty Code</h2>
-					<pre><code contenteditable>
-function linkify( selector ) {
-  if( supports3DTransforms ) {
+					<h1>API and Protocol</h1>
+					<aside class="notes">
+						When discussing WebSockets there is the protcol that is provided by the IETF(Internat Engineering Task Force)  and the WebSocket API from WC3 (World Wide Web Consortium).
+					</aside>
+				</section>
 
-    var nodes = document.querySelectorAll( selector );
+				<section>
+					<h1>WebSocket API</h1>
+					<ul>
+						<li class="fragment">Event driven</li>
+					</ul>
+					<aside class="notes">
+						WC3.
+					</aside>
+				</section>
 
-    for( var i = 0, len = nodes.length; i &lt; len; i++ ) {
-      var node = nodes[i];
 
-      if( !node.className ) ) {
-        node.className += ' roll';
-      }
-    };
-  }
+				<section>
+					<h1>WebSocket object</h1>
+					<pre><code data-trim contenteditable>
+var ws = new WebSocket("ws://localhost:80/app");
+					</code></pre>
+					<ul>
+						<li class="fragment">Browser creates a connection</li>
+						<li class="fragment">Browser sends a HTTP Upgrade request</li>
+						<li class="fragment">Will not block</li>
+					</ul>
+					<aside class="notes">
+						* Browser will create a connection a using HTTP Upgrade request
+						* The same TCP connection that was used for the HTTP request will then be used for the WebSocket communication
+						  aslong as the response for the upgrade is successfully verified.
+						* Can use 'ws' or 'wss'. The url to the websocket server.
+					</aside>
+				</section>
+
+
+				<section>
+					<h1>HTTP Upgrade request</h1>
+					<pre><code data-trim contenteditable>
+GET ws://localhost:80/app HTTP/1.1
+Host: localhost:80
+Origin: http://localhost
+Upgrade: websocket
+Connection: Upgrade
+Sec-WebSocket-Version: 13
+Sec-WebSocket-Key: r/9y5eS3shxHilVx0fVBcA==
+					</code></pre>
+					<ul>
+						<li class="fragment">Origin</li>
+						<li class="fragment">Upgrade</li>
+						<li class="fragment">Connection</li>
+						<li class="fragment">Sec-WebSocket-Version</li>
+						<li class="fragment">Sec-WebSocket-Key</li>
+					</ul>
+					<aside class="notes">
+						Origin
+						Same idea as Origin for browsers and allows a server to restrict which web pages can contact the server.
+						Obviously, this model does not work from other clients (no browser) as they can simply add any origin they like.
+
+						Upgrade 
+						Is used to indicate that we want to "upgrade" to WebSocket. This is a little odd as we are not upgrading at all, infact we are going
+						to be using WebSocket instead of HTTP over TCP. But the 'Upgrade' header was made for extenstion and at the time probably for upgrading to a newer HTTP 
+						version or for upgrading to TLS.
+
+						The 'Upgrade' header is hop-by-hop, it is/should not passed through proxies. 
+						By specifying 'Connection: upgrade' proxies are forced to parse this header and remove any headers listed. Connection is for this connection only not 
+						for the end-to-end connection.
+
+						Connection
+						HTTP/1.1 proxies MUST parse the Connection header field before a message is forwarded and, for each connection-token in this field, remove any header 
+						field(s) from the message with the same name as the connection-token.
+						Some proxy servers might not understand the Connection header and not remove the headers listed. Let's say that we send an upgrade request to such a proxy server.
+						Client -> proxy -> server
+						* In this case the client sends the upgrade request to the proxy, expecting a websocket to be create if the upgrade is successful.
+						* The proxy server creates a connection to the target server and forwards the request, including all headers.
+						* The server does not know about the proxy but just sees a upgrade request and so handles it. Responding with the correct response will keep the socket open.
+						* The proxy server handles the response from the server and "forwards" it back to the client. For the client this looks like a successful upgrade to a WebSocket
+						* When the client javascript tries to send using the web socket, the proxy server will not know how to handle it, this does not look like a HTTP request, and 
+						will most probably be dropped or an error returned and the connection closed.
+
+						Sec-WebSocket-Version
+						Although draft versions of this document (-09, -10, -11, and -12) were posted (they were mostly comprised of editorial changes and clarifications and not 
+						changes to the wire protocol), values 9, 10, 11, and 12 were not used as valid values for Sec-WebSocket-Version. These values were reserved in the IANA 
+						registry but were not and will not be used.
+
+						Sec-WebSocket-Key.  
+						Is a random 16 bytes value that is base64 encoded. And used to prevent cross protcol attacks. There is nothing stopping someone from intercepting this
+						header, base64 decoding it and they would have the ran
+						This is really not to prevent attacks on WebSocket servers but instead agains non-WebSocket server. If this did not exist the browser could possible be
+						tricked into opening a TCP connection (by issuing a forged upgrade request) to a non-websocket server (in this case we have to imagine that there is now
+						Sec-WebSocket-Accept part of the protocol).
+
+						Several header names are reserved by browsers for platform-level usage in the XMLHttpRequest specification and thus are off-limits for use in applications. 
+						The setRequestHeader(header, value) of the XMLHttpRequest object will terminate if one of these headers are used (see link), among these are:
+						* Connection
+						* Host
+						* Origin
+						* Upgrade
+						or if the start of header is a case-insensitive match for Proxy- or Sec-.
+						http://www.w3.org/TR/XMLHttpRequest/#dom-xmlhttprequest-setrequestheader
+
+						These header names include those starting with Sec-, as well as common security-critical headers like referer, host, and cookie.
+						The new headers defined in RFC 6455 are all prefixed with Sec-. These prefixes are so named because the browser is opening WebSocket connections on behalf of applications, 
+						but the low-level, security sensitive parameters in the handshake are off-limits to application code. This effectively locks down upgrade requests so that they can only be 
+						made through APIs like the WebSocket constructor and not through general HTTP APIs like XMLHttpRequest.
+
+					</aside>
+				</section>
+
+				<section>
+					<h1>HTTP Upgrade response</h1>
+					<pre><code data-trim contenteditable>
+HTTP/1.1 101 Switching Protocols
+Connection: Upgrade
+Upgrade: websocket
+Sec-WebSocket-Accept: lluo2AIajFdtzn73RnauhvkCOvU=
+					</code></pre>
+					<ul>
+						<li class="fragment">Sec-WebSocket-Accept?</li>
+					</ul>
+				</section>
+
+				<section>
+					<h1>Sec-WebSocket-Key</h1>
+					<ul>
+						<li class="fragment">base64(sha1(Sec-WebSocket-Key + GUID)</li>
+						<li class="fragment">How is this secure?</li>
+						<li class="fragment">It's not</li>
+					</ul>
+
+					<aside class="notes">
+						This is actually used to protect non-websocket servers from cross-protocol attacts. So what are those?
+					</aside>
+				</section>
+
+				<section>
+					<h1>Protocol Attack</h1>
+					<ul>
+						<li class="fragment">Protect non WebSocket servers</li>
+						<li class="fragment">Prevents the browser from opening connection using WebSocket object</li>
+						<li class="fragment">Browser will kill connection if Sec-WebSocket-Accept is not correct</li>
+					</ul>
+
+					<aside class="notes">
+						For example, this could be a request crafted and sent from a browser. It would have the correct handshake header
+						as it would still be using the WebSocket object but the target server would not be a WebSocket server.
+						Instead the target server would running a different protocol and by having the browser send this request might
+						get that server to take action. But to actually send data to that server a connection would first have to be established.
+						But a server that does not understand WebSocket would not respond with the correct Sec-WebSocket-Accept header and hence the
+						browser will close the connection.
+						So this is only to cover this particular issue. 
+					</aside>
+				</section>
+
+				<section>
+					<h1>Subprotocols</h1>
+					<pre><code data-trim contenteditable>
+var ws = new WebSocket("ws://localhost:80/app", "custom.protocol");
+					</code></pre>
+					<ul>
+						<li class="fragment">Registered <a href="http://www.iana.org/assignments/websocket/websocket.xml">IANA</a></li>
+						<li class="fragment">STOMP</li>
+						<li class="fragment">SOAP</li>
+						<li class="fragment">Custom</li>
+					</ul>
+					<aside class="notes">
+						The connection will only be established if the server reports that it has selected one of these subprotocols.
+					</aside>
+				</section>
+
+				<section>
+					<h1>Events</h1>
+					<ul>
+						<li class="fragment">Open</li>
+						<li class="fragment">Message</li>
+						<li class="fragment">Error</li>
+						<li class="fragment">Close</li>
+					</ul>
+					<aside class="notes">
+						WC3.
+					</aside>
+				</section>
+
+				<section>
+					<h1>Open Event</h1>
+					<pre><code data-trim contenteditable>
+var ws = new WebSocket("ws://localhost:80/app");
+ws.onopen = function() {
+    console.log("opened connection");
 }
 					</code></pre>
-					<p>Courtesy of <a href="http://softwaremaniacs.org/soft/highlight/en/description/">highlight.js</a>.</p>
 				</section>
 
 				<section>
-					<h2>Intergalactic Interconnections</h2>
-					<p>
-						You can link between slides internally,
-						<a href="#/2/3">like this</a>.
-					</p>
+					<h1>Close Event</h1>
+					<pre><code data-trim contenteditable>
+var ws = new WebSocket("ws://localhost:80/app");
+ws.onclose = function(e) {
+    console.log(e.wasClean);
+    console.log(e.code);
+    console.log(e.reason);
+}
+					</code></pre>
+					<aside class="notes">
+					The wasClean property is a boolean indicating whether the connection was closed cleanly. The property is true if the WebSocket closed in response to a close frame from the server. 
+					If the connection closes due to some other reason (for example, because underlying TCP connection closed), the wasClean property is false.
+					</aside>
 				</section>
 
 				<section>
-					<section>
-						<h2>Fragmented Views</h2>
-						<p>Hit the next arrow...</p>
-						<p class="fragment">... to step through ...</p>
-						<ol>
-							<li class="fragment"><code>any type</code></li>
-							<li class="fragment"><em>of view</em></li>
-							<li class="fragment"><strong>fragments</strong></li>
-						</ol>
-
-						<aside class="notes">
-							This slide has fragments which are also stepped through in the notes window.
-						</aside>
-					</section>
-					<section>
-						<h2>Fragment Styles</h2>
-						<p>There's a few styles of fragments, like:</p>
-						<p class="fragment grow">grow</p>
-						<p class="fragment shrink">shrink</p>
-						<p class="fragment roll-in">roll-in</p>
-						<p class="fragment fade-out">fade-out</p>
-						<p class="fragment highlight-red">highlight-red</p>
-						<p class="fragment highlight-green">highlight-green</p>
-						<p class="fragment highlight-blue">highlight-blue</p>
-					</section>
+					<h1>Error Event</h1>
+					<pre><code data-trim contenteditable>
+var ws = new WebSocket("ws://localhost:80/app");
+ws.onerror = function() {
+    console.log("Error occurred. Reconnecting...");
+}
+					</code></pre>
+					<aside class="notes">
+					If you receive an error event, you can expect a close event to follow shortly. 
+					The code and reason in the close event can sometimes tell you what caused the error. 
+					The error event handler is a good place to call your reconnection logic to the server and handle the exceptions coming from the WebSocket object. 
+					</aside>
 				</section>
 
 				<section>
-					<h2>Spectacular image!</h2>
-					<a class="image" href="http://lab.hakim.se/meny/" target="_blank">
-						<img width="320" height="299" src="http://s3.amazonaws.com/hakim-static/portfolio/images/meny.png" alt="Meny">
-					</a>
-				</section>
-
-				<section>
-					<h2>Export to PDF</h2>
-					<p>Presentations can be <a href="https://github.com/hakimel/reveal.js#pdf-export">exported to PDF</a>, below is an example that's been uploaded to SlideShare.</p>
-					<iframe id="slideshare" src="http://www.slideshare.net/slideshow/embed_code/13872948" width="455" height="356" style="margin:0;overflow:hidden;border:1px solid #CCC;border-width:1px 1px 0;margin-bottom:5px" allowfullscreen> </iframe>
-					<script>
-						document.getElementById('slideshare').attributeName = 'allowfullscreen';
-					</script>
-				</section>
-
-				<section>
-					<h2>Take a Moment</h2>
-					<p>
-						Press b or period on your keyboard to enter the 'paused' mode. This mode is helpful when you want to take distracting slides off the screen
-						during a presentation.
-					</p>
-				</section>
-
-				<section>
-					<h2>Stellar Links</h2>
+					<h1>Message Event</h1>
+					<pre><code data-trim contenteditable>
+var ws = new WebSocket("ws://localhost:80/app");
+ws.onopen = function(e) {
+    console.log(e.data);
+}
+					</code></pre>
 					<ul>
-						<li><a href="https://github.com/hakimel/reveal.js">Source code on GitHub</a></li>
-						<li><a href="http://hakim.se/projects/reveal-js">Leave feedback on my site</a></li>
-						<li><a href="http://twitter.com/hakimel">Follow me on Twitter</a></li>
+						<li class="fragment">string</li>
+						<li class="fragment">binary</li>
+					<aside class="notes">
+					</aside>
+				</section>
+
+				<section>
+					<h1>String</h1>
+					<pre><code data-trim contenteditable>
+if(typeof e.data === "string") {
+    ...
+}
+					</code></pre>
+					<aside class="notes">
+					</aside>
+				</section>
+				<section>
+					<h1>Blob</h1>
+					<pre><code data-trim contenteditable>
+if(e.data instanceof Blob) {
+    ...
+}
+					</code></pre>
+					<aside class="notes">
+					</aside>
+				</section>
+
+				<section>
+					<h1>Sending data</h1>
+					<pre><code data-trim contenteditable>
+var ws = new WebSocket("ws://localhost:80/app");
+    ws.send("some data");
+}
+					</code></pre>
+					<ul>
+						<li class="fragment">string</li>
+						<li class="fragment">binary</li>
+					<aside class="notes">
+					Will be sent as a TextFrame
+					</aside>
+				</section>
+
+				<section>
+					<h1>Sending binary data</h1>
+					<pre><code data-trim contenteditable>
+var ws = new WebSocket("ws://localhost:80/app");
+    ws.send(new Blob("some data"));
+}
+					</code></pre>
+					<aside class="notes">
+					Will be sent as a BinaryFrame
+					</aside>
+				</section>
+
+				<section>
+					<h1>Masking</h1>
+					<ul>
+						<li class="fragment">Client frames only</li>
 					</ul>
+					<aside class="notes">
+						Masking is done to prevent cross-protocol attacks when an intermediate is in the picture. 
+						For example, if there is a transparent/intercepting proxy in the communication path the first WebSocket upgrade might succeed and a WebSocket connection established. 
+						But if the WebSocket client crafted a TextFrame that looks like a HTTP request this could be interpreted by the proxy as a HTTP request and acted upon. 
+
+						Lets say that the protocol did not use masking. The initial handshake goes as planned but the intermediate does not understand the websocket protocol.
+						The client thinks that it was a connection open (which is now does to the proxy server) but instead of sending "normal" data it sends what resembles
+						a HTTP request:
+						GET /sensitive-document HTTP/1.1
+						Host: somehost.com
+
+						Can cause ip hijacking, proxy poisoning.
+					</aside>
 				</section>
 
 				<section>
-					<h2>It's free</h2>
-					<p>
-						reveal.js and <a href="http://www.rvl.io">rvl.io</a> are entirely free but if you'd like to support the projects you can donate below.
-						Donations will go towards hosting and domain costs.
-					</p>
-					<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
-						<input type="hidden" name="cmd" value="_donations">
-						<input type="hidden" name="business" value="hakim.elhattab@gmail.com">
-						<input type="hidden" name="lc" value="US">
-						<input type="hidden" name="item_name" value="reveal.js / rvl.io">
-						<input type="hidden" name="no_note" value="0">
-						<input type="hidden" name="currency_code" value="USD">
-						<input type="hidden" name="bn" value="PP-DonationsBF:btn_donate_LG.gif:NonHostedGuest">
-						<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-					</form>
+					<h1>Example attack</h1>
+					<ul>
+						<li class="fragment">Client and Server understand WebSocket</li>
+						<li class="fragment">Transparent Proxy in the middle which does not</li>
+					</ul>
+					</code></pre>
+					<aside class="notes">
+					</aside>
 				</section>
 
 				<section>
-					<h1>THE END</h1>
-					<h3>BY Hakim El Hattab / hakim.se</h3>
+					<h1>Example attack cont</h1>
+					<pre><code data-trim contenteditable>
+var ws = new WebSocket("ws://localhost:80/app");
+					</code></pre>
+					<ul>
+						<li class="fragment">Upgrade request succeeds (plain HTTP)</li>
+						<li class="fragment">Client has a connection to proxy</li>
+						<li class="fragment">WebSocket send will not arrive at server</li>
+					</ul>
+					<aside class="notes">
+					</aside>
+				</section>
+
+				<section>
+					<h1>Example attack cont</h1>
+					<pre><code data-trim contenteditable>
+ws.send("GET /clickcounter.html HTTP/1.1\r\nHOST: www.bad.com\r\n");
+					</code></pre></p>
+					<ul>
+						<li class="fragment">Client crafts a HTTP request</li>
+						<li class="fragment">Proxy could interpret as HTTP request</li>
+						<li class="fragment">Proxy route using HOST header</li>
+						<li class="fragment">Possible IP-hijacking</li>
+						<li class="fragment">Possible proxy cache poising</li>
+					</ul>
+					<aside class="notes">
+					</aside>
+				</section>
+
+				<section>
+					<h1>WebSocket Properties</h1>
+					<pre><code data-trim contenteditable>
+var ws = new WebSocket("ws://localhost:80/app");
+					</code></pre>
+					<ul>
+						<li class="fragment">ws.extensions</li>
+						<li class="fragment">ws.protocol</li>
+						<li class="fragment">ws.bufferedAmount</li>
+						<li class="fragment">ws.binaryType</li>
+					</ul>
+					<aside class="notes">
+					 The WebSocket instance has a number of properties:
+
+					 extensions:
+					 the extensions that might have been negotiated.
+
+					 protocol: 
+					 the protcol that was settled upon.
+					 Registered and un
+
+					 bufferedAmount:
+					 amount of data buffered for transmission to the server, particularly if the client application transports large amounts of data to the server. 
+					 Even though calling send() is instant, actually transmitting that data over the Internet is not. 
+					</aside>
+				</section>
+
+				<section>
+					<h1>WebSocket Protocol RFC 6455</h1>
+					<aside class="notes">
+					So we've seen some of the client API and perhaps understand a little more about the initial handshake.
+					Lets take a look at the WebSocket Protocol now.
+					</aside>
+				</section>
+
+				<section>
+					<h1>WebSocket Protocol</h1>
+					<ul>
+						<li class="fragment">Minimal framing</li>
+						<li class="fragment">Layer on top of TCP</li>
+						<li class="fragment">Origin (browsers)</li>
+					</ul>
+					<aside class="notes">
+					</aside>
+				</section>
+
+				<section>
+					<h1>WebSocket Wire Format</h1>
+					<pre>
+0                   1                   2                   3
+0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-------+-+-------------+-------------------------------+
+|F|R|R|R| opcode|M| Payload len |    Extended payload length    |
+|I|S|S|S|  (4)  |A|     (7)     |             (16/64)           |
+|N|V|V|V|       |S|             |   (if payload len==126/127)   |
+| |1|2|3|       |K|             |                               |
++-+-+-+-+-------+-+-------------+ - - - - - - - - - - - - - - - +
+|     Extended payload length continued, if payload len == 127  |
++ - - - - - - - - - - - - - - - +-------------------------------+
+|                               |Masking-key, if MASK set to 1  |
++-------------------------------+-------------------------------+
+| Masking-key (continued)       |          Payload Data         |
++-------------------------------- - - - - - - - - - - - - - - - +
+:                     Payload Data continued ...                :
++ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - +
+|                     Payload Data continued ...                |
++---------------------------------------------------------------+</pre>
+					<aside class="notes">
+					 The first byte contain:
+					 0 = FIN 	-> is this the final fragment?
+					 1 = RSV1 	-> 0 unless used by an extension
+					 2 = RSV2 	-> 0 unless used by an extension
+					 3 = RSV3 	-> 0 unless used by an extension
+					 4 = OpCode (%x0=Continuation frame, %x1=text, %x2=binary
+					 5 = OpCode %x3-7=reserved, %x8=close, %x9=ping, %xA=pong
+					 6 = OpCode %xB-F=reserved
+					 7 = OpCode
+					 The second byte contain:
+					 0 = MASK 	-> is this frame masked? Must be for clients
+					 1 = Payload length
+					 2 = Payload length
+					 3 = Payload length
+					 4 = Payload length
+					 5 = Payload length
+					 6 = Payload length
+					 7 = Payload length
+					 The third byte contain:
+					 Depends on the value in Payload length. 
+					 If 0-125, that is the payload length.
+					 If 126, the following 2 bytes interpreted as a 16-bit unsigned integer are the payload length.
+					 If 127, the following 8 bytes interpreted as a 64-bit unsigned integer
+					 Masking key: 4 bytes. 32 bit random value used with client to server masking.
+					 Payload data.
+					</aside>
+				</section>
+
+				<section>
+					<h1>Types of frames</h1>
+					<ul>
+						<li class="fragment">Text</li>
+						<li class="fragment">Binary</li>
+						<li class="fragment">Close</li>
+						<li class="fragment">Ping</li>
+						<li class="fragment">Pong</li>
+					</ul>
+					<aside class="notes">
+					So we've seen some of the client API and perhaps understand a little more about the initial handshake.
+					Lets take a look at the WebSocket Protocol now.
+					</aside>
+				</section>
+
+
+				<section>
+				<img width="420" height="514" src="img/pingpong.png" alt="Ping/Pong"></br>
+					<ul>
+						<li class="fragment">Can be sent by both the server and the browser</li>
+						<li class="fragment">Currently not available in API</li>
+					</ul>
+					<aside class="notes">
+					</aside>
+				</section>
+
+				<section>
+					<h1>Extensions</h1>
+					<ul>
+						<li>Extend the WebSocket protocol</li>
+						<li>Can add new op codes and data fields to the frame</li>
+						<li>Browser and server must support</li>
+					</ul>
+					<aside class="notes">
+					</aside>
+				</section>
+
+				<section>
+					<h1>Extensions: mux</h1>
+					<p>Sec-WebSocket-Extensions: <a href="http://tools.ietf.org/html/draft-ietf-hybi-websocket-multiplexing-01">mux</a></p>
+					<ul>
+						<li>Separate logical WebSocket connections share a TCP connection</li>
+					</ul>
+					<aside class="notes">
+					With this extension, one TCP connection can provide multiple virtual 
+
+					Extensions are so named because they extend the WebSocket Protocol. Extensions can add new opcodes and data fields to the framing format. 
+					You may find it more difficult to deploy a new extension than a new protocol (or “subprotocol”) because browser vendors must explicitly build in support for these extensions. 
+					You’ll probably find it much easier to write a JavaScript library that implements a protocol than to wait for all browser vendors to standardize an extension and all users to update their browsers to the version supporting that extension.
+					</aside>
+				</section>
+
+				<section>
+					<h1>Extensions: compression</h1>
+					<p>Sec-WebSocket-Extensions: x-webkit-deflate-frame</p>
+					<aside class="notes">
+						Chrome sends this extension which will be used if the backend server supports it.
+					</aside>
+				</section>
+
+				<section>
+					<h1>Proxies</h1>
+					<p>Revers proxy servers</p>
+					<aside class="notes">
+						Most proxies are not equipped to handle the 'upgraded' connection and either drop the connection because of an 'illegal' request or don't 
+						forward the upgrade header and the application isn't able to process the request.
+					</aside>
+				</section>
+
+				<section>
+					<h1>Fallbacks/Polyfills</h1>
+					<p>SockJS</p>
+					<p>Socket.io</p>
+					<aside class="notes">
+					</aside>
+				</section>
+
+				<section>
+					<h1>Future</h1>
+				</section>
+
+				<section>
+					<h1>Multiplex WebSockets</h1>
+					<p>Multiple logic WebSocket connections over same physical connection</p>
+					<aside class="notes">
+					  MUX multiple logical websocket connections over same connection.
+					</aside>
+				</section>
+
+				<section>
+					<h1>HTTP 2.0/SPDY and WebSocket</h1>
+					<aside class="notes">
+					  Google are working on multiplexing WebSockets over SPDY. Will this added overhead to the protocol?
+					</aside>
+				</section>
+
+				<section>
+					<h1>HTTP 2.0/SPDY and SSE</h1>
+					<aside class="notes">
+					  Perhaps with HTTP2.0 and SSE we could go back to using pure HTTP and use SSE for server push and normal REST for sending?
+					</aside>
+				</section>
+
+				<section>
+					<h1>Questions?</h1>
 				</section>
 
 			</div>
@@ -362,13 +869,11 @@ function linkify( selector ) {
 				// Optional libraries used to extend on reveal.js
 				dependencies: [
 					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
-					{ src: 'plugin/markdown/showdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
 					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
 					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
 					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
 					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
-					// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
-					// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
 				]
 			});
 
