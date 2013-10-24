@@ -526,7 +526,7 @@ ws.onerror = function() {
 					<h1>Message Event</h1>
 					<pre><code data-trim contenteditable>
 var ws = new WebSocket("ws://localhost:80/app");
-ws.onopen = function(e) {
+ws.onmessage = function(e) {
     console.log(e.data);
 }
 					</code></pre>
