@@ -68,14 +68,14 @@
 					<h1>HTTP 1.0</h1>
 					<ul>
 						<li class="fragment">1996 RFC-1945</li>
-						<li class="fragment">Headers</li>
 						<li class="fragment">Response not limited to hypertext</li>
+						<li class="fragment">Headers</li>
 						<li class="fragment">Connection closed</li>
 					</ul>
 					<aside class="notes">
 						The need for more advanced responses, images, content negotiation.
 						content encoding, character set support, multi-part types, authorization, caching, proxy behaviors, date formats, and more
-						Requiring a new TCP connection per request imposes a significant performance penalty on HTTP 1.0
+						Requiring a new TCP connection per request imposes a significant performance penalty on HTTP 1.0 (TCP slow start etc)
 						(HTTP/1.0 -> new connection for every request unless 'Connection: keep-alive' is sent. Not part of the 1.0 spec)
 					</aside>
 				</section>
@@ -86,19 +86,26 @@
 						<li class="fragment">RFC-2068 1997</li>
 						<li class="fragment">RFC-2016 1999</li>
 						<li class="fragment">Keep-alive</li>
-						<li class="fragment">Chunked encoding transfers</li>
+						<li class="fragment">Chunked transfer encoding</li>
 						<li class="fragment">Still half duplex</li>
 					</ul>
 					<aside class="notes">
+						Official spec in 1997 and then a number of improvements in 1999.
+
 						keepalive allows us to reuse the existing TCP connection for multiple requests to the same host and deliver a much faster end-user experience
 						keepalive is the default in 1.1 but was backported to 1.0 by using 'Connection: Keep-Alive'
 						Called 'persistent' connection, because the connection persists across multiple requests. 
 
-						Official spec in 1997 and then a number of improvements in 1999.
+						'Transfer-Encoding: Chunked' enables streaming from the server. Server can respond with chunks of data, where each chunk is delimited by the size
+						of the chunk followed by a CRLF, the data, CRLF. The response is terminated with a last-chunk (size of zero).
+						
 
 						Introduced pipelining (but not really relavent to this disucssion)
-						There is also  pipelining where multiple requests can be send to the server and not have to wait for a response before sending the next request.
-						The advantage is that multiple requests can be sent in one go. The server must send back the responses in the same order though.
+						There is also pipelining where multiple requests can be send to the server and not have to wait for a response before sending the next request.
+						The advantage is that multiple requests can be sent in one go saving having to make multiple calls. The server must send back the responses in the same order though.
+						Problems:
+						Depending on the order in which requests are sent, if a request requiring particularly lengthy, processing like a database query, sent relatively early in the pipeline, this 
+						could actually cause a degradation in performance because all the other responses have to wait for the lengthy one to finish before the others can be sent back.
 					</aside>
 				</section>
 
@@ -247,11 +254,12 @@
 						<li class="fragment">New connection to poll</li>
 						<li class="fragment">Header overhead</li>
 						<li class="fragment">Server resources for processing</li>
-						<li class="fragment">Latency. Data not be delivered until next poll</li>
+						<li class="fragment">Latency. Data not delivered until next poll</li>
 					</ul>
 					<aside class="notes">
 						* multiple connections required.
-						* a full HTTP Request/Response is being which means all of the headers.
+						* Browsers allow at most 6 parallel connections to one hostname, with domain sharding 15+.
+						* a full HTTP Request/Response is used being which means all of the headers.
 						* More data might be available when polling but will not be available to clients until the next request(poll)
 					</aside>
 				</section>
@@ -259,7 +267,7 @@
 				<section>
 					<h1>Server Sent Events</h1>
 					<ul>
-						<li class="fragment">HTTP</li>
+						<li class="fragment">HTTP 1.1</li>
 						<li class="fragment">Client initiated</li>
 						<li class="fragment">Event based</li>
 						<li class="fragment">Native to browser (where supported)</li>
@@ -268,9 +276,11 @@
 					</ul>
 					<aside class="notes">
 						An option that exist today is also Server Sent Events which are native to browsers that support them and use HTTP/1.1.
-						This allows for unidirectional communication of  data/events from the server. The impl will take care for reconnects.
+						Just to make people aware that they don't have to use WebSocket if a simple solution is available.
+						This allows for unidirectional communication of data/events from the server. 
+						The impl will take care for reconnects.
 					    Might be nice if there is no need to send back to the server, like a news feed, stock ticker.	
-						Just to make people aware that the don't have to use WebSocket if a simple solution is available.
+
 						var source = new EventSource('/newsfeed');
 						source.addEventListener('message', function(e) {
 						  console.log(e.data);
@@ -300,9 +310,39 @@
 				</section>
 
 				<section>
+					<h1>TCPConnection</h1>
+					<ul>
+						<li class="fragment">Ian Hickson</li>
+						<li class="fragment">Specifications/Drafts</li>
+						<ul>
+							<li class="fragment">Hixie-</li>
+							<ul>
+								<li class="fragment">Ian <strong>"Hixie"</strong> Hickson</li>
+							</ul>
+							<li class="fragment">Hybi-</li>
+							<ul>
+								<li class="fragment"><strong>Hy</strong>pertext <strong>bi</strong>-directional</li>
+							</ul>
+						</ul>
+					</ul>
+					<aside class="notes">
+						Hixie-75 Feb 4 2010  Chrome 4 and Safari 5.0.0
+						Hixie-76 May 6 2010  Firefox 4.0 (disabled), Chrome 6, Safari 5.0.1, Opera 11.00 (disabled)
+						Hybi-00 is just a copy of Hixie-76
+						7 Hybi-07 April 22 2011 Firefox 6.
+						8 Hybi-10 July 11 2011  Firefox 7, Firefox(Android) 7, Chrome 14, 
+						13 RFC-6455 IE 10, Firefox 11, Firefox(Android) 11, Chrome 16, Safari 6, Opera 12.01
+						Note that the native Android browser does not support WebSockets.
+
+						Hixie stems from the Ian "Hixie" Hicksson how came up with the TCPConnection
+						"Hybi" stems from "hy_pertext bi_directional". IETF working group "BiDirectional or Server-Initiated HTTP (Active WG)".
+					</aside>
+				</section>
+
+				<section>
 					<h1>API and Protocol</h1>
 					<aside class="notes">
-						When discussing WebSockets there is the protcol that is provided by the IETF(Internat Engineering Task Force)  and the WebSocket API from WC3 (World Wide Web Consortium).
+						When discussing WebSockets there is the protcol that is provided by the IETF(Internet Engineering Task Force) and the WebSocket API from WC3 (World Wide Web Consortium).
 					</aside>
 				</section>
 
@@ -323,6 +363,7 @@
 var ws = new WebSocket("ws://localhost:80/app");
 					</code></pre>
 					<ul>
+						<li class="fragment">ws or wss</li>
 						<li class="fragment">Browser creates a connection</li>
 						<li class="fragment">Browser sends a HTTP Upgrade request</li>
 						<li class="fragment">Will not block</li>
@@ -330,7 +371,7 @@ var ws = new WebSocket("ws://localhost:80/app");
 					<aside class="notes">
 						* Browser will create a connection a using HTTP Upgrade request
 						* The same TCP connection that was used for the HTTP request will then be used for the WebSocket communication
-						  aslong as the response for the upgrade is successfully verified.
+						  as long as the response for the upgrade is successfully verified.
 						* Can use 'ws' or 'wss'. The url to the websocket server.
 					</aside>
 				</section>
@@ -357,15 +398,15 @@ Sec-WebSocket-Key: r/9y5eS3shxHilVx0fVBcA==
 					<aside class="notes">
 						Origin
 						Same idea as Origin for browsers and allows a server to restrict which web pages can contact the server.
-						Obviously, this model does not work from other clients (no browser) as they can simply add any origin they like.
+						Obviously, this model does not work from other clients (non browsers) as they can simply add any origin they like.
 
 						Upgrade 
 						Is used to indicate that we want to "upgrade" to WebSocket. This is a little odd as we are not upgrading at all, infact we are going
 						to be using WebSocket instead of HTTP over TCP. But the 'Upgrade' header was made for extenstion and at the time probably for upgrading to a newer HTTP 
-						version or for upgrading to TLS.
+						version or for upgrading to TLS. As it is not commonly used, TSL used a different port instead, interm. might not support it at all.
 
 						The 'Upgrade' header is hop-by-hop, it is/should not passed through proxies. 
-						By specifying 'Connection: upgrade' proxies are forced to parse this header and remove any headers listed. Connection is for this connection only not 
+						By specifying 'Connection: upgrade' proxies are forced to parse this header and remove any headers listed. 'Connection' is for this connection only not 
 						for the end-to-end connection.
 
 						Connection
@@ -374,16 +415,27 @@ Sec-WebSocket-Key: r/9y5eS3shxHilVx0fVBcA==
 						Some proxy servers might not understand the Connection header and not remove the headers listed. Let's say that we send an upgrade request to such a proxy server.
 						Client -> proxy -> server
 						* In this case the client sends the upgrade request to the proxy, expecting a websocket to be create if the upgrade is successful.
-						* The proxy server creates a connection to the target server and forwards the request, including all headers.
-						* The server does not know about the proxy but just sees a upgrade request and so handles it. Responding with the correct response will keep the socket open.
-						* The proxy server handles the response from the server and "forwards" it back to the client. For the client this looks like a successful upgrade to a WebSocket
-						* When the client javascript tries to send using the web socket, the proxy server will not know how to handle it, this does not look like a HTTP request, and 
+						* The proxy server creates a connection to the target server and forwards the request, including all headers (just copying them).
+						* The server does not know about the proxy but just sees a upgrade request and so handles it. Responding with the correct response and will keep the socket open.
+						* The proxy server handles the response from the server and "forwards" it back to the client. For the client this looks like a successful upgrade to a WebSocket.
+						* When the client tries to send using the web socket, the proxy server will not know how to handle it, it will not look like a HTTP request, and 
 						will most probably be dropped or an error returned and the connection closed.
 
 						Sec-WebSocket-Version
 						Although draft versions of this document (-09, -10, -11, and -12) were posted (they were mostly comprised of editorial changes and clarifications and not 
 						changes to the wire protocol), values 9, 10, 11, and 12 were not used as valid values for Sec-WebSocket-Version. These values were reserved in the IANA 
 						registry but were not and will not be used.
+						Protocol version:
+						Hixie-75 Feb 4 2010  Chrome 4 and Safari 5.0.0
+						Hixie-76 May 6 2010  Firefox 4.0 (disabled), Chrome 6, Safari 5.0.1, Opera 11.00 (disabled)
+						Hybi-00 is just a copy of Hixie-76
+						7 Hybi-07 April 22 2011 Firefox 6.
+						8 Hybi-10 July 11 2011  Firefox 7, Firefox(Android) 7, Chrome 14, 
+						13 RFC-6455 IE 10, Firefox 11, Firefox(Android) 11, Chrome 16, Safari 6, Opera 12.01
+						Note that the native Android browser does not support WebSockets.
+
+						Hixie stems from the Ian "Hixie" Hicksson how came up with the TCPConnection
+						"Hybi" stems from "hy_pertext bi_directional". IETF working group "BiDirectional or Server-Initiated HTTP (Active WG)".
 
 						Sec-WebSocket-Key.  
 						Is a random 16 bytes value that is base64 encoded. And used to prevent cross protcol attacks. There is nothing stopping someone from intercepting this
@@ -587,6 +639,7 @@ var ws = new WebSocket("ws://localhost:80/app");
 					</code></pre>
 					<aside class="notes">
 					Will be sent as a BinaryFrame
+					It is also possible to send an ArrayBuffer
 					</aside>
 				</section>
 
@@ -821,6 +874,7 @@ var ws = new WebSocket("ws://localhost:80/app");
 					<ul>
 						<li class="fragment">Might not understand WebSocket</li>
 						<li class="fragment">Might not handle Upgrade requests</li>
+						<li class="fragment">Use wss</li>
 					</ul>
 					<aside class="notes">
 						Most proxies are not equipped to handle the 'upgraded' connection and either drop the connection because of an 'illegal' request or don't 
@@ -835,6 +889,8 @@ var ws = new WebSocket("ws://localhost:80/app");
 						<li class="fragment">socket.io</li>
 					</ul>
 					<aside class="notes">
+						Hopefully this project will die as WebSockets are implemented in all browsers.
+						SockJS has the same API as WebSocket so it is a simple change.
 					</aside>
 				</section>
 
