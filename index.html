@@ -92,8 +92,13 @@
 					<aside class="notes">
 						keepalive allows us to reuse the existing TCP connection for multiple requests to the same host and deliver a much faster end-user experience
 						keepalive is the default in 1.1 but was backported to 1.0 by using 'Connection: Keep-Alive'
+						Called 'persistent' connection, because the connection persists across multiple requests. 
+
 						Official spec in 1997 and then a number of improvements in 1999.
-						There is pipelining but that introduces a number of issues.
+
+						Introduced pipelining (but not really relavent to this disucssion)
+						There is also  pipelining where multiple requests can be send to the server and not have to wait for a response before sending the next request.
+						The advantage is that multiple requests can be sent in one go. The server must send back the responses in the same order though.
 					</aside>
 				</section>
 
@@ -666,15 +671,17 @@ var ws = new WebSocket("ws://localhost:80/app");
 					 The WebSocket instance has a number of properties:
 
 					 extensions:
-					 the extensions that might have been negotiated.
+					 The extensions that might have been negotiated. Will be available in onopen if set and otherwise null.
 
 					 protocol: 
-					 the protcol that was settled upon.
-					 Registered and un
+					 the protcol that was settled upon. Will be available in onopen if set and null.
 
 					 bufferedAmount:
-					 amount of data buffered for transmission to the server, particularly if the client application transports large amounts of data to the server. 
+					 Amount of data buffered for transmission to the server, particularly if the client application transports large amounts of data to the server. 
 					 Even though calling send() is instant, actually transmitting that data over the Internet is not. 
+
+					 binaryType:
+					 Determines how binary data is exposed to scripts. Can either be "blob" or "arrayBuffer"
 					</aside>
 				</section>
 
