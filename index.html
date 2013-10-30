@@ -57,7 +57,7 @@
 						<li class="fragment">ASCII protocol, running over a TCP/IP link</li>
 						<li class="fragment">Request/Response</li>
 						<li class="fragment">Response limited to hypertext</li>
-						<li class="fragment">Connection closed</li>
+						<li class="fragment">(connection closed)</li>
 					</ul>
 					<aside class="notes">
 						HTTP/0.9 get a single hypertext document - no headers or metadata.
@@ -70,9 +70,10 @@
 						<li class="fragment">1996 RFC-1945</li>
 						<li class="fragment">Response not limited to hypertext</li>
 						<li class="fragment">Headers</li>
-						<li class="fragment">Connection closed</li>
+						<li class="fragment">(connection closed)</li>
 					</ul>
 					<aside class="notes">
+						"informal RFC with common usages"
 						The need for more advanced responses, images, content negotiation.
 						content encoding, character set support, multi-part types, authorization, caching, proxy behaviors, date formats, and more
 						Requiring a new TCP connection per request imposes a significant performance penalty on HTTP 1.0 (TCP slow start etc)
@@ -297,6 +298,9 @@
 						<li class="fragment">Less overhead</li>
 						<li class="fragment">Should work with current infrastructure</li>
 					</ul>
+					<aside class="notes">
+					 HTTP headers can be ~800 bytes.
+					</aside>
 				</section>
 
 				<section>
