@@ -57,7 +57,7 @@
 						<li class="fragment">ASCII protocol, running over a TCP/IP link</li>
 						<li class="fragment">Request/Response</li>
 						<li class="fragment">Response limited to hypertext</li>
-						<li class="fragment">connection closed</li>
+						<li class="fragment">Connection closed</li>
 					</ul>
 					<aside class="notes">
 						HTTP/0.9 get a single hypertext document - no headers or metadata.
@@ -74,8 +74,8 @@
 					</ul>
 					<aside class="notes">
 						"informal RFC with common usages"
-						The need for more advanced responses, images, content negotiation.
-						content encoding, character set support, multi-part types, authorization, caching, proxy behaviors, date formats, and more
+						The need for more advanced responses like images, content negotiation,
+						content encoding, character set support, multi-part types, authorization, caching, proxy behaviors, date formats, and more.
 						Requiring a new TCP connection per request imposes a significant performance penalty on HTTP 1.0 (TCP slow start etc)
 						(HTTP/1.0 -> new connection for every request unless 'Connection: keep-alive' is sent. Not part of the 1.0 spec)
 					</aside>
@@ -93,20 +93,21 @@
 					<aside class="notes">
 						Official spec in 1997 and then a number of improvements in 1999.
 
-						keepalive allows us to reuse the existing TCP connection for multiple requests to the same host and deliver a much faster end-user experience
-						keepalive is the default in 1.1 but was backported to 1.0 by using 'Connection: Keep-Alive'
+						Keep-alive allows us to reuse the existing TCP connection for multiple requests to the same host and deliver a much faster end-user experience
+						keep-alive is the default in 1.1 but was backported to 1.0 by using 'Connection: Keep-Alive'
 						Called 'persistent' connection, because the connection persists across multiple requests. 
 
 						'Transfer-Encoding: Chunked' enables streaming from the server. Server can respond with chunks of data, where each chunk is delimited by the size
 						of the chunk followed by a CRLF, the data, CRLF. The response is terminated with a last-chunk (size of zero).
 						
-
 						Introduced pipelining (but not really relavent to this disucssion)
 						There is also pipelining where multiple requests can be send to the server and not have to wait for a response before sending the next request.
-						The advantage is that multiple requests can be sent in one go saving having to make multiple calls. The server must send back the responses in the same order though.
+						The advantage is that multiple requests can be sent in one go, saving having to make multiple calls. The server must send back the responses 
+						in the same order though.
 						Problems:
-						Depending on the order in which requests are sent, if a request requiring particularly lengthy, processing like a database query, sent relatively early in the pipeline, this 
-						could actually cause a degradation in performance because all the other responses have to wait for the lengthy one to finish before the others can be sent back.
+						Depending on the order in which requests are sent, if a request requiring particularly lengthy, processing like a database query, sent relatively 
+						early in the pipeline, this could actually cause a degradation in performance because all the other responses have to wait for the 
+						lengthy one to finish before the others can be sent back.
 					</aside>
 				</section>
 
@@ -155,8 +156,8 @@
 					<h1>HTTP</h1>
 					<ul>
 						<li class="fragment">Half duplex</li>
-						<li class="fragment">Request from client</li>
-						<li class="fragment">Response from server</li>
+						<li class="fragment">Request initiated from client</li>
+						<li class="fragment">Server respons</li>
 						<li class="fragment">Has worked well</li>
 					</ul>
 					<aside class="notes">
@@ -177,7 +178,7 @@
 					<aside class="notes">
 						There are certain types of application functionality that do not fit in nicely with the request/response paradigm of the web.
 						These types of applications require updates to be sent from the server side to the client.
-						Notice that we are talking about bi-directional communication. A stock ticker or news feed could use web socket but 
+						Notice that we are talking about bi-directional full-duplex communication. A stock ticker or news feed could use web socket but 
 						it could also use plain HTTP technology like Server Sent Events (SSE).
 					</aside>
 				</section>
@@ -211,7 +212,7 @@
 					<h1>HTTP "Short" Polling</h1>
 					<ul>
 						<li class="fragment">Polls server using an interval</li>
-						<li class="fragment">Might poll unnessesariarly</li>
+						<li class="fragment">Might poll unnecessarily</li>
 						<li class="fragment">More network trafic</li>
 						<li class="fragment">Server resources involved to handle each poll</li>
 					</ul>
@@ -219,9 +220,9 @@
 						* Actually not part of Comet as it only regards "long" polling or streaming solutions.
 						* Continous requests for data from the client to server. 
 						* The server can queue up data/events which are delivered to the client when it polls.
-						* Really just used Ajax with a poll interval.
+						* Really just uses Ajax with a polling interval.
 						* Can be wasteful as there might not be any data to retreive. 
-							* Still HTTP trafic on the wire (headers!)
+							* Still HTTP trafic on the wire (headers overhead!)
 							* Server resources are also involved.
 					</aside>
 				</section>
@@ -229,7 +230,6 @@
 				<section>
 					<h1>HTTP Long polling</h1>
 					<ul>
-						<li class="fragment">Server wait with response until it's available</li>
 						<li class="fragment">Server responds when data is available</li>
 						<li class="fragment">Client polls again</li>
 					</ul>
@@ -246,6 +246,9 @@
 						<li class="fragment">HTTP/1.1 chunks</li>
 					</ul>
 					<aside class="notes">
+					Server maintains a persistent connection and sends chunks of data as it becomes available.
+					Still http headers overhead when sending. 
+					Intermediaries might have issues. Use HTTPS
 					</aside>
 				</section>
 
@@ -279,15 +282,16 @@
 						An option that exist today is also Server Sent Events which are native to browsers that support them and use HTTP/1.1.
 						Just to make people aware that they don't have to use WebSocket if a simple solution is available.
 						This allows for unidirectional communication of data/events from the server. 
-						The impl will take care for reconnects.
+						The impl/browser will take care for reconnects.
 					    Might be nice if there is no need to send back to the server, like a news feed, stock ticker.	
 
 						var source = new EventSource('/newsfeed');
 						source.addEventListener('message', function(e) {
 						  console.log(e.data);
 						}, false);
+						Server uses "Content-Type: text/event-stream".
 						If the URL passed to the EventSource constructor is an absolute URL, its origin (scheme, domain, port) must match that of the calling page.
-						You could have a servlet that serves 'newsfeed'.
+						You could have a servlet that serves 'newsfeed'. Although not in the standard yet support for CORS is coming.
 					</aside>
 				</section>
 
@@ -305,11 +309,14 @@
 
 				<section>
 					<h1>Solution: WebSocket</h1>
-					<blockquote cite="http://searchservervirtualization.techtarget.com/definition/Our-Favorite-Technology-Quotations">
-						&ldquo;two-way communication with servers that does not rely on opening multiple HTTP connections&rdquo;
-					</blockquote>
+					<ul>
+						<li class="fragment">Layer on top of TCP</li>
+						<li class="fragment">Origin based security model</li>
+						<li class="fragment">Addressing and protocol naming machanism</li>
+					</ul>
 					<aside class="notes">
 						It's also designed in such a way that its servers can share a port with HTTP servers, by having its handshake be a valid HTTP Upgrade request.
+						The addressing allows for multiple services on one port.
 					</aside>
 				</section>
 
@@ -347,7 +354,8 @@
 				<section>
 					<h1>API and Protocol</h1>
 					<aside class="notes">
-						When discussing WebSockets there is the protcol that is provided by the IETF(Internet Engineering Task Force) and the WebSocket API from WC3 (World Wide Web Consortium).
+						When discussing WebSockets there is the protcol that is provided by the IETF(Internet Engineering Task Force) and 
+						the WebSocket API from WC3 (World Wide Web Consortium).
 					</aside>
 				</section>
 
@@ -403,10 +411,10 @@ Sec-WebSocket-Key: r/9y5eS3shxHilVx0fVBcA==
 					<aside class="notes">
 						Origin
 						Same idea as Origin for browsers and allows a server to restrict which web pages can contact the server.
-						Obviously, this model does not work from other clients (non browsers) as they can simply add any origin they like.
+						Obviously, this model does not work for other clients (non browsers) as they can simply add any origin they like.
 
 						Upgrade 
-						Is used to indicate that we want to "upgrade" to WebSocket. This is a little odd as we are not upgrading at all, infact we are going
+						Is used to indicate that we want to "upgrade" to WebSockets. This is a little odd as we are not upgrading at all, infact we are going
 						to be using WebSocket instead of HTTP over TCP. But the 'Upgrade' header was made for extenstion and at the time probably for upgrading to a newer HTTP 
 						version or for upgrading to TLS. As it is not commonly used, TSL used a different port instead, interm. might not support it at all.
 
@@ -430,6 +438,7 @@ Sec-WebSocket-Key: r/9y5eS3shxHilVx0fVBcA==
 						Although draft versions of this document (-09, -10, -11, and -12) were posted (they were mostly comprised of editorial changes and clarifications and not 
 						changes to the wire protocol), values 9, 10, 11, and 12 were not used as valid values for Sec-WebSocket-Version. These values were reserved in the IANA 
 						registry but were not and will not be used.
+
 						Protocol version:
 						Hixie-75 Feb 4 2010  Chrome 4 and Safari 5.0.0
 						Hixie-76 May 6 2010  Firefox 4.0 (disabled), Chrome 6, Safari 5.0.1, Opera 11.00 (disabled)
@@ -439,13 +448,10 @@ Sec-WebSocket-Key: r/9y5eS3shxHilVx0fVBcA==
 						13 RFC-6455 IE 10, Firefox 11, Firefox(Android) 11, Chrome 16, Safari 6, Opera 12.01
 						Note that the native Android browser does not support WebSockets.
 
-						Hixie stems from the Ian "Hixie" Hicksson how came up with the TCPConnection
-						"Hybi" stems from "hy_pertext bi_directional". IETF working group "BiDirectional or Server-Initiated HTTP (Active WG)".
-
 						Sec-WebSocket-Key.  
 						Is a random 16 bytes value that is base64 encoded. And used to prevent cross protcol attacks. There is nothing stopping someone from intercepting this
 						header, base64 decoding it and they would have the ran
-						This is really not to prevent attacks on WebSocket servers but instead agains non-WebSocket server. If this did not exist the browser could possible be
+						This is really not to prevent attacks on WebSocket servers but instead against non-WebSocket server. If this did not exist, the browser could possibly be
 						tricked into opening a TCP connection (by issuing a forged upgrade request) to a non-websocket server (in this case we have to imagine that there is now
 						Sec-WebSocket-Accept part of the protocol).
 
@@ -480,9 +486,10 @@ Sec-WebSocket-Accept: lluo2AIajFdtzn73RnauhvkCOvU=
 				</section>
 
 				<section>
-					<h1>Sec-WebSocket-Key</h1>
+					<h1>Sec-WebSocket-Accept</h1>
 					<ul>
 						<li class="fragment">base64(sha1(Sec-WebSocket-Key + GUID))</li>
+						<li class="fragment">Result as Sec-WebSocket-Accept</li>
 						<li class="fragment">How is this secure?</li>
 						<li class="fragment">It's not</li>
 					</ul>
@@ -527,6 +534,11 @@ var ws = new WebSocket("ws://localhost:80/app", "custom.protocol");
 					<aside class="notes">
 						The connection will only be established if the server reports that it has selected one of these subprotocols.
 						Internet Assigned Numbers Authority.
+						The WebSocket protocol does not have any headers or metadata and if such metadata is required the client and the
+						server must agree on their own subprotocol.
+						Client can used ws.protocol to determine which protocol was chosen. It might have to send data in the "old" format
+						for this server.
+						If the server does not support any of the client protocols the onerror callback is invoked, and the connection is terminated.
 					</aside>
 				</section>
 
@@ -539,6 +551,7 @@ var ws = new WebSocket("ws://localhost:80/app", "custom.protocol");
 						<li class="fragment">Close</li>
 					</ul>
 					<aside class="notes">
+						Event driven/async/"real-time"
 						WC3.
 					</aside>
 				</section>
@@ -595,6 +608,7 @@ ws.onmessage = function(e) {
 					<ul>
 						<li class="fragment">string</li>
 						<li class="fragment">binary</li>
+					</ul>
 					<aside class="notes">
 					</aside>
 				</section>
@@ -609,6 +623,7 @@ if(typeof e.data === "string") {
 					<aside class="notes">
 					</aside>
 				</section>
+
 				<section>
 					<h1>Blob</h1>
 					<pre><code data-trim contenteditable>
@@ -616,7 +631,26 @@ if(e.data instanceof Blob) {
     ...
 }
 					</code></pre>
+					<ul>
+						<li class="fragment">Suitable for file like objects(images)</li>
+					</ul>
 					<aside class="notes">
+					</aside>
+				</section>
+
+				<section>
+					<h1>ArrayBuffer</h1>
+					<pre><code data-trim contenteditable>
+ws.binaryType = "arraybuffer";
+if(e.data instanceof ArrayBuffer) {
+    ...
+}
+					</code></pre>
+					<ul>
+						<li class="fragment">Suitable when you need to process/split</li>
+					</ul>
+					<aside class="notes">
+					fixed-length binary data buffer.ArrayBufferView objects which can present the contents of the buffer in a specific format.
 					</aside>
 				</section>
 
@@ -630,6 +664,7 @@ var ws = new WebSocket("ws://localhost:80/app");
 					<ul>
 						<li class="fragment">string</li>
 						<li class="fragment">binary</li>
+					</ul>
 					<aside class="notes">
 					Will be sent as a TextFrame
 					</aside>
@@ -642,9 +677,13 @@ var ws = new WebSocket("ws://localhost:80/app");
     ws.send(new Blob("some data"));
 }
 					</code></pre>
+					<ul>
+						<li class="fragment">Asynchronous</li>
+						<li class="fragment">Data queued by client</li>
+					</ul>
 					<aside class="notes">
 					Will be sent as a BinaryFrame
-					It is also possible to send an ArrayBuffer
+					It is also possible to send/receive an ArrayBuffer
 					</aside>
 				</section>
 
@@ -879,7 +918,7 @@ var ws = new WebSocket("ws://localhost:80/app");
 					<ul>
 						<li class="fragment">Might not understand WebSocket</li>
 						<li class="fragment">Might not handle Upgrade requests</li>
-						<li class="fragment">Use wss</li>
+						<li class="fragment">Use TLS</li>
 					</ul>
 					<aside class="notes">
 						Most proxies are not equipped to handle the 'upgraded' connection and either drop the connection because of an 'illegal' request or don't 
