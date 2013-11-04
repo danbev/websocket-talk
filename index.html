@@ -52,24 +52,45 @@
 
 				<section>
 					<h1>HTTP 0.9</h1>
-					<h3 class="fragment">1991</h3>
-					<h3 class="fragment">ASCII protocol, running over a TCP/IP link</h3>
-					<h3 class="fragment">Request/Response</h3>
-					<h3 class="fragment">Response limited to hypertext</h3>
-					<h3 class="fragment">Connection closed</h3>
+					<pre><code data-trim contenteditable>
+GET /somedoc
+
+(document)
+
+Connection closed by foreign host.
+					</code></pre>
 					<aside class="notes">
+						1991
+						ASCII protocl running over a TCP/IP link
+						Request/response
 						HTTP/0.9 get a single hypertext document - no headers or metadata.
 					</aside>
 				</section>
 
+				<!--
+				<section>
+					<p>
+						<img width="524" height="524" src="img/under_construction.gif" alt="Under Construction gif">
+					</p>
+				</section>
+				-->
+
 				<section>
 					<h1>HTTP 1.0</h1>
-					<h3 class="fragment">1996 RFC-1945</h3>
-					<h3 class="fragment">Response not limited to hypertext</h3>
-					<h3 class="fragment">Headers</h3>
-					<h3 class="fragment">Connection closed</h3>
+					<pre><code data-trim contenteditable>
+GET /cat.gif HTTP/1.0
+Accept: */*
+
+HTTP/1.0 200 OK
+Content-Type: image/gif
+Content-Lenght: 640
+
+(image)
+
+Connection closed by foreign host.
+					</code></pre>
 					<aside class="notes">
-						"informal RFC with common usages"
+						1996 RFC-1945 "informal RFC with common usages"
 						The need for more advanced responses like images, content negotiation,
 						content encoding, character set support, multi-part types, authorization, caching, proxy behaviors, date formats, and more.
 						Requiring a new TCP connection per request imposes a significant performance penalty on HTTP 1.0 (TCP slow start etc)
@@ -79,11 +100,29 @@
 
 				<section>
 					<h1>HTTP 1.1</h1>
-					<h3 class="fragment">RFC-2068 1997</h3>
-					<h3 class="fragment">RFC-2016 1999</h3>
-					<h3 class="fragment">Keep-alive</h3>
-					<h3 class="fragment">Chunked transfer encoding</h3>
-					<h3 class="fragment">Still half duplex</h3>
+					<pre><code data-trim contenteditable>
+GET /index.html HTTP/1.1
+Accept: text/html
+
+HTTP/1.1 200 OK
+Connection: keep-alive
+Content-Type: text/html
+Transfer-Encoding: chunked
+
+80
+(text)
+
+100
+(text)
+
+0
+
+Connection closed by foreign host.
+					</code></pre>
+				</section>
+			
+				<section>
+					<h1>Half duplex</h1>
 					<aside class="notes">
 						Official spec in 1997 and then a number of improvements in 1999.
 
@@ -118,7 +157,7 @@
 				</section>
 
 				<section>
-					<h1>Half-Duplex</h1>
+					<h1>Half duplex</h1>
 					<p>
 						<img width="460" height="276" src="img/one-way-bridge.jpg" alt="One-way bridge">
 					</p>
@@ -130,7 +169,7 @@
 				</section>
 
 				<section>
-					<h1>Full-Duplex</h1>
+					<h1>Full Duplex</h1>
 					<p>
 						<img width="460" height="276" src="img/two-way-bridge.jpg" alt="Two-way bridge">
 					</p>
@@ -141,7 +180,7 @@
 				</section>
 
 				<section>
-					<h1>HTTP recap</h1>
+					<h1>HTTP Recap</h1>
 					<h3 class="fragment">Half duplex</h3>
 					<h3 class="fragment">Request initiated from client</h3>
 					<h3 class="fragment">Server response</h3>
@@ -157,13 +196,13 @@
 
 				<section>
 					<h1>More advanced apps</h1>
-					<h3 class="fragment">chat/messaging</h3>
-					<h3 class="fragment">games</h3>
-					<h3 class="fragment">collaboration</h3>
+					<h3 class="fragment">Chat/Messaging</h3>
+					<h3 class="fragment">Games</h3>
+					<h3 class="fragment">Collaboration</h3>
 					<aside class="notes">
 						There are certain types of application functionality that do not fit in nicely with the request/response paradigm of the web.
 						These types of applications require updates to be sent from the server side to the client.
-						Notice that we are talking about bi-directional full-duplex communication. A stock ticker or news feed could use web socket but 
+						Notice that we are talking about bi-directional full duplex communication. A stock ticker or news feed could use web socket but 
 						it could also use plain HTTP technology like Server Sent Events (SSE).
 					</aside>
 				</section>
@@ -193,10 +232,13 @@
 
 				<section>
 					<h1>"Short" Polling</h1>
-					<h3 class="fragment">Polls server using an interval</h3>
-					<h3 class="fragment">Might poll unnecessarily</h3>
-					<h3 class="fragment">More network trafic</h3>
-					<h3 class="fragment">Server resources involved to handle each poll</h3>
+					<pre><code data-trim contenteditable>
+setInterval(function() { 
+    $.getJSON('ajax/message', function(msg) { 
+        //Do something 
+    }); 
+}, 2000);
+					</code></pre>
 					<aside class="notes">
 						* Actually not part of Comet as it only regards "long" polling or streaming solutions.
 						* Continous requests for data from the client to server. 
@@ -209,7 +251,17 @@
 				</section>
 
 				<section>
-					<h1>Long polling</h1>
+					<h1>"Short Polling"</h1>
+					<img width="460" height="276" src="img/polling_request.png" alt="Short Polling">
+					<h3 class="fragment">Polls server using an interval</h3>
+					<h3 class="fragment">Might poll unnecessarily</h3>
+					<h3 class="fragment">More network trafic</h3>
+					<h3 class="fragment">Server resources involved to handle each poll</h3>
+				</section>
+
+				<section>
+					<h1>Long Polling</h1>
+					<img width="460" height="276" src="img/long_polling_request.png" alt="Long Polling">
 					<h3 class="fragment">Server responds when data is available</h3>
 					<h3 class="fragment">Client polls again</h3>
 					<aside class="notes">
@@ -220,6 +272,7 @@
 
 				<section>
 					<h1>Streaming</h1>
+					<img width="460" height="276" src="img/streaming_request.png" alt="Streaming Polling">
 					<h3 class="fragment">Maintains an open connection to server</h3>
 					<h3 class="fragment">HTTP/1.1 chunks</h3>
 					<aside class="notes">
@@ -246,7 +299,7 @@
 
 				<section>
 					<h1>What do we want?</h1>
-					<h3 class="fragment">Full-Duplex</h3>
+					<h3 class="fragment">Full duplex</h3>
 					<h3 class="fragment">Less overhead</h3>
 					<h3 class="fragment">Should work with current infrastructure</h3>
 					<aside class="notes">
@@ -348,11 +401,6 @@ Connection: Upgrade
 Sec-WebSocket-Version: 13
 Sec-WebSocket-Key: r/9y5eS3shxHilVx0fVBcA==
 					</code></pre>
-					<h3 class="fragment">Origin</h3>
-					<h3 class="fragment">Upgrade</h3>
-					<h3 class="fragment">Connection</h3>
-					<h3 class="fragment">Sec-WebSocket-Version</h3>
-					<h3 class="fragment">Sec-WebSocket-Key</h3>
 					<aside class="notes">
 						Origin
 						Same idea as Origin for browsers and allows a server to restrict which web pages can contact the server.
@@ -454,7 +502,7 @@ Sec-WebSocket-Accept: lluo2AIajFdtzn73RnauhvkCOvU=
 				<section>
 					<h1>Subprotocols</h1>
 					<pre><code data-trim contenteditable>
-var ws = new WebSocket("ws://localhost:80/app", "custom.protocol");
+var ws = new WebSocket("ws://localhost:80/app", ["proto1", "proto2"]);
 					</code></pre>
 					<ul>
 						<li class="fragment">Registered <a href="http://www.iana.org/assignments/websocket/websocket.xml">IANA</a></li>
@@ -462,7 +510,8 @@ var ws = new WebSocket("ws://localhost:80/app", "custom.protocol");
 							<li class="fragment">STOMP</li>
 							<li class="fragment">SOAP</li>
 						</ul>
-						<li class="fragment">Custom</li>
+					<li class="fragment">Binary</li>
+					<li class="fragment">Custom</li>
 					</ul>
 					<aside class="notes">
 						Simple or Streaming Text Oriented Messaging Protocol
@@ -625,7 +674,7 @@ var ws = new WebSocket("ws://localhost:80/app");
 				</section>
 
 				<section>
-					<h1>Masking</h1>
+					<img width="203" height="255" src="img/masking.jpg" alt="Short Polling">
 					<h3 class="fragment">Required for client frames</h3>
 					<h3 class="fragment">Obfuscate payload</h3>
 					<h3 class="fragment">Target of attack is web infrastructure</h3>
@@ -659,7 +708,7 @@ var ws = new WebSocket("ws://localhost:80/app");
 					<pre><code data-trim contenteditable>
 var ws = new WebSocket("ws://server.com:80/app");
 					</code></pre>
-					<h3 class="fragment">Upgrade request succeeds (plain HTTP)</h3>
+					<h3 class="fragment">Upgrade request succeeds</h3>
 					<h3 class="fragment">Client has a connection to proxy</h3>
 					<h3 class="fragment">Server is not the target of the attack</h3>
 					<aside class="notes">
@@ -699,7 +748,8 @@ ws.send("GET /index.html HTTP/1.1\r\nHOST: www.good.com\r\n");
 				</section>
 
 				<section>
-					<h1>WebSocket Protocol RFC 6455</h1>
+					<h1>RFC 6455</h1>
+					<img src="img/rfcspec.png" alt="Spec">
 					<aside class="notes">
 					So we've seen some of the client API and perhaps understand a little more about the initial handshake.
 					Lets take a look at the WebSocket Protocol now.
@@ -779,7 +829,7 @@ ws.send("testing");
 							<li class="fragment"><span style="color:yellow">mask 1</span></li>
 							<li class="fragment"><span style="color:brown">lenght (7)</span></li>
 						</ul>
-						<li class="fragment">Next 4 bytes the mask</li>
+						<li class="fragment"><span style="color:yellow">Next 4 bytes the mask</span></li>
 						<li class="fragment">Payload data</li>
 					</ul>
 				</section>
@@ -809,7 +859,7 @@ ws.send("testing");
 				<section>
 					<h1>Extensions</h1>
 					<h3 class="fragment">Extend the WebSocket protocol</h3>
-					<h3 class="fragment">Can add new op codes and data fields to the frame</h3>
+					<h3 class="fragment">New op codes to the frame</h3>
 					<h3 class="fragment">Browser and server must support</h3>
 					<aside class="notes">
 					</aside>
@@ -841,6 +891,7 @@ ws.send("testing");
 					<h1>Proxies</h1>
 					<h3 class="fragment">Might not understand WebSocket</h3>
 					<h3 class="fragment">Might not handle Upgrade requests</h3>
+					<h3 class="fragment">Might drop connection</h3>
 					<h3 class="fragment">Use TLS</h3>
 					<aside class="notes">
 						Most proxies are not equipped to handle the 'upgraded' connection and either drop the connection because of an 'illegal' request or don't 
@@ -864,7 +915,8 @@ ws.send("testing");
 
 				<section>
 					<h1>Multiplex WebSockets</h1>
-					<h3 class="fragment">Multiple logic WebSocket connections over same physical connection</h3>
+					<h3 class="fragment">One physical connection</h3>
+					<h3 class="fragment">Multiple logical channels</h3>
 					<aside class="notes">
 					  MUX multiple logical websocket connections over same connection.
 					</aside>
