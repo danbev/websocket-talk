@@ -52,13 +52,11 @@
 
 				<section>
 					<h1>HTTP 0.9</h1>
-					<ul>
-						<li class="fragment">1991</li>
-						<li class="fragment">ASCII protocol, running over a TCP/IP link</li>
-						<li class="fragment">Request/Response</li>
-						<li class="fragment">Response limited to hypertext</li>
-						<li class="fragment">Connection closed</li>
-					</ul>
+					<h3 class="fragment">1991</h3>
+					<h3 class="fragment">ASCII protocol, running over a TCP/IP link</h3>
+					<h3 class="fragment">Request/Response</h3>
+					<h3 class="fragment">Response limited to hypertext</h3>
+					<h3 class="fragment">Connection closed</h3>
 					<aside class="notes">
 						HTTP/0.9 get a single hypertext document - no headers or metadata.
 					</aside>
@@ -66,12 +64,10 @@
 
 				<section>
 					<h1>HTTP 1.0</h1>
-					<ul>
-						<li class="fragment">1996 RFC-1945</li>
-						<li class="fragment">Response not limited to hypertext</li>
-						<li class="fragment">Headers</li>
-						<li class="fragment">Connection closed</li>
-					</ul>
+					<h3 class="fragment">1996 RFC-1945</h3>
+					<h3 class="fragment">Response not limited to hypertext</h3>
+					<h3 class="fragment">Headers</h3>
+					<h3 class="fragment">Connection closed</h3>
 					<aside class="notes">
 						"informal RFC with common usages"
 						The need for more advanced responses like images, content negotiation,
@@ -83,13 +79,11 @@
 
 				<section>
 					<h1>HTTP 1.1</h1>
-					<ul>
-						<li class="fragment">RFC-2068 1997</li>
-						<li class="fragment">RFC-2016 1999</li>
-						<li class="fragment">Keep-alive</li>
-						<li class="fragment">Chunked transfer encoding</li>
-						<li class="fragment">Still half duplex</li>
-					</ul>
+					<h3 class="fragment">RFC-2068 1997</h3>
+					<h3 class="fragment">RFC-2016 1999</h3>
+					<h3 class="fragment">Keep-alive</h3>
+					<h3 class="fragment">Chunked transfer encoding</h3>
+					<h3 class="fragment">Still half duplex</h3>
 					<aside class="notes">
 						Official spec in 1997 and then a number of improvements in 1999.
 
@@ -116,10 +110,8 @@
 					<p>
 						<img width="460" height="276" src="img/one-way-street.jpg" alt="One way street">
 					</p>
-					<ul>
-						<li class="fragment">TV</li>
-						<li class="fragment">Radio</li>
-					</ul>
+					<h3 class="fragment">TV</h3>
+					<h3 class="fragment">Radio</h3>
 					<aside class="notes">
 						Broadcast, examples tv, radio.
 					</aside>
@@ -130,9 +122,7 @@
 					<p>
 						<img width="460" height="276" src="img/one-way-bridge.jpg" alt="One-way bridge">
 					</p>
-					<ul>
-						<li class="fragment">Walkie-talkie</li>
-					</ul>
+					<h3 class="fragment">Walkie-talkie</h3>
 					<aside class="notes">
 					Send one direction at a time. Walkie-talkie communication. 
 					HTTP 1.1 is like this (unless pipelineing is used)
@@ -144,22 +134,18 @@
 					<p>
 						<img width="460" height="276" src="img/two-way-bridge.jpg" alt="Two-way bridge">
 					</p>
-					<ul>
-						<li class="fragment">Telefon</li>
-					</ul>
+					<h3 class="fragment">Telefon</h3>
 					<aside class="notes">
 						Send in both directions at the same time. WebSocket
 					</aside>
 				</section>
 
 				<section>
-					<h1>HTTP</h1>
-					<ul>
-						<li class="fragment">Half duplex</li>
-						<li class="fragment">Request initiated from client</li>
-						<li class="fragment">Server response</li>
-						<li class="fragment">Has worked well</li>
-					</ul>
+					<h1>HTTP recap</h1>
+					<h3 class="fragment">Half duplex</h3>
+					<h3 class="fragment">Request initiated from client</h3>
+					<h3 class="fragment">Server response</h3>
+					<h3 class="fragment">Has worked well</h3>
 					<aside class="notes">
 						* Just trying to clarify that communication is initiated by the client always!
 						* This worked well for the types of apps that the web was "intended" for -> Document retreival.
@@ -171,11 +157,9 @@
 
 				<section>
 					<h1>More advanced apps</h1>
-					<ul>
-						<li class="fragment">chat/messaging</li>
-						<li class="fragment">games</li>
-						<li class="fragment">collaboration</li>
-					</ul>
+					<h3 class="fragment">chat/messaging</h3>
+					<h3 class="fragment">games</h3>
+					<h3 class="fragment">collaboration</h3>
 					<aside class="notes">
 						There are certain types of application functionality that do not fit in nicely with the request/response paradigm of the web.
 						These types of applications require updates to be sent from the server side to the client.
@@ -186,9 +170,7 @@
 
 				<section>
 					<h1>These apps exist today</h1>
-					<ul>
-						<li class="fragment">How do they work?</li>
-					</ul>
+					<h3 class="fragment">How do they work?</h3>
 					<aside class="notes">
 						chats/messaging and games, etc are present on the web today, so how do they work if they are restricted with the reqeust/response model of
 						HTTP?
@@ -211,12 +193,10 @@
 
 				<section>
 					<h1>"Short" Polling</h1>
-					<ul>
-						<li class="fragment">Polls server using an interval</li>
-						<li class="fragment">Might poll unnecessarily</li>
-						<li class="fragment">More network trafic</li>
-						<li class="fragment">Server resources involved to handle each poll</li>
-					</ul>
+					<h3 class="fragment">Polls server using an interval</h3>
+					<h3 class="fragment">Might poll unnecessarily</h3>
+					<h3 class="fragment">More network trafic</h3>
+					<h3 class="fragment">Server resources involved to handle each poll</h3>
 					<aside class="notes">
 						* Actually not part of Comet as it only regards "long" polling or streaming solutions.
 						* Continous requests for data from the client to server. 
@@ -230,10 +210,8 @@
 
 				<section>
 					<h1>Long polling</h1>
-					<ul>
-						<li class="fragment">Server responds when data is available</li>
-						<li class="fragment">Client polls again</li>
-					</ul>
+					<h3 class="fragment">Server responds when data is available</h3>
+					<h3 class="fragment">Client polls again</h3>
 					<aside class="notes">
 						The server holds the connection open and when it has data it will respond with
 						that data and then close the connection. The client then reconnects.
@@ -242,10 +220,8 @@
 
 				<section>
 					<h1>Streaming</h1>
-					<ul>
-						<li class="fragment">Maintains an open connection to server</li>
-						<li class="fragment">HTTP/1.1 chunks</li>
-					</ul>
+					<h3 class="fragment">Maintains an open connection to server</h3>
+					<h3 class="fragment">HTTP/1.1 chunks</h3>
 					<aside class="notes">
 					Server maintains a persistent connection and sends chunks of data as it becomes available.
 					Still http headers overhead when sending. 
@@ -255,12 +231,10 @@
 
 				<section>
 					<h1>Problems with Comet</h1>
-					<ul>
-						<li class="fragment">New connection to poll</li>
-						<li class="fragment">Header overhead</li>
-						<li class="fragment">Server resources for processing</li>
-						<li class="fragment">Latency. Data not delivered until next poll</li>
-					</ul>
+					<h3 class="fragment">New connection to poll</h3>
+					<h3 class="fragment">Header overhead</h3>
+					<h3 class="fragment">Server resources for processing</h3>
+					<h3 class="fragment">Latency. Data not delivered until next poll</h3>
 					<aside class="notes">
 						* multiple connections required.
 						* Browsers allow at most 6 parallel connections to one hostname, with domain sharding 15+.
@@ -272,11 +246,9 @@
 
 				<section>
 					<h1>What do we want?</h1>
-					<ul>
-						<li class="fragment">Full-Duplex</li>
-						<li class="fragment">Less overhead</li>
-						<li class="fragment">Should work with current infrastructure</li>
-					</ul>
+					<h3 class="fragment">Full-Duplex</h3>
+					<h3 class="fragment">Less overhead</h3>
+					<h3 class="fragment">Should work with current infrastructure</h3>
 					<aside class="notes">
 					 HTTP headers can be ~800 bytes.
 					</aside>
@@ -284,11 +256,9 @@
 
 				<section>
 					<h1>Solution: WebSocket</h1>
-					<ul>
-						<li class="fragment">Layered on top of TCP</li>
-						<li class="fragment">Bidirectional full duplex</li>
-						<li class="fragment">Works with port 80/443</li>
-					</ul>
+					<h3 class="fragment">Layered on top of TCP</h3>
+					<h3 class="fragment">Bidirectional full duplex</h3>
+					<h3 class="fragment">Works with port 80/443</h3>
 					<aside class="notes">
 						It's also designed in such a way that its servers can share a port with HTTP servers, by having its handshake be a valid HTTP Upgrade request.
 						The addressing allows for multiple services on one port.
@@ -297,8 +267,8 @@
 
 				<section>
 					<h1>TCPConnection</h1>
+					<h3 class="fragment">2007, Ian Hickson</h3>
 					<ul>
-						<li class="fragment">2007, Ian Hickson</li>
 						<li class="fragment">Specifications/Drafts</li>
 						<ul>
 							<li class="fragment">Hixie-75, Hixie-76</li>
@@ -333,10 +303,8 @@
 
 				<section>
 					<h1>API and Protocol</h1>
-					<ul>
-						<li class="fragment">API from W3C</li>
-						<li class="fragment">Protocol from IETF</li>
-					</ul>
+					<h3 class="fragment">API from W3C</h3>
+					<h3 class="fragment">Protocol from IETF</h3>
 					<aside class="notes">
 						When discussing WebSockets there is the protcol that is provided by the IETF(Internet Engineering Task Force) and 
 						the WebSocket API from WC3 (World Wide Web Consortium).
@@ -345,26 +313,21 @@
 
 				<section>
 					<h1>WebSocket API</h1>
-					<ul>
-						<li class="fragment">Simple event driven</li>
-					</ul>
+					<h3 class="fragment">Simple event driven API</h3>
 					<aside class="notes">
 						WC3.
 					</aside>
 				</section>
-
 
 				<section>
 					<h1>WebSocket object</h1>
 					<pre><code data-trim contenteditable>
 var ws = new WebSocket("ws://localhost:80/app");
 					</code></pre>
-					<ul>
-						<li class="fragment">ws or wss</li>
-						<li class="fragment">Browser creates a connection</li>
-						<li class="fragment">Browser sends a HTTP Upgrade request</li>
-						<li class="fragment">Will not block</li>
-					</ul>
+					<h3 class="fragment">ws or wss</h3>
+					<h3 class="fragment">Browser creates a connection</h3>
+					<h3 class="fragment">Browser sends a HTTP Upgrade request</h3>
+					<h3 class="fragment">Will not block</h3>
 					<aside class="notes">
 						* Browser will create a connection a using HTTP Upgrade request
 						* The same TCP connection that was used for the HTTP request will then be used for the WebSocket communication
@@ -385,13 +348,11 @@ Connection: Upgrade
 Sec-WebSocket-Version: 13
 Sec-WebSocket-Key: r/9y5eS3shxHilVx0fVBcA==
 					</code></pre>
-					<ul>
-						<li class="fragment">Origin</li>
-						<li class="fragment">Upgrade</li>
-						<li class="fragment">Connection</li>
-						<li class="fragment">Sec-WebSocket-Version</li>
-						<li class="fragment">Sec-WebSocket-Key</li>
-					</ul>
+					<h3 class="fragment">Origin</h3>
+					<h3 class="fragment">Upgrade</h3>
+					<h3 class="fragment">Connection</h3>
+					<h3 class="fragment">Sec-WebSocket-Version</h3>
+					<h3 class="fragment">Sec-WebSocket-Key</h3>
 					<aside class="notes">
 						Origin
 						Same idea as Origin for browsers and allows a server to restrict which web pages can contact the server.
@@ -461,20 +422,15 @@ Connection: Upgrade
 Upgrade: websocket
 Sec-WebSocket-Accept: lluo2AIajFdtzn73RnauhvkCOvU=
 					</code></pre>
-					<ul>
-						<li class="fragment">Sec-WebSocket-Accept?</li>
-					</ul>
+					<h3 class="fragment">Sec-WebSocket-Accept?</h3>
 				</section>
 
 				<section>
 					<h1>Sec-WebSocket-Accept</h1>
-					<ul>
-						<li class="fragment">base64(sha1(Sec-WebSocket-Key + GUID))</li>
-						<li class="fragment">Result as Sec-WebSocket-Accept</li>
-						<li class="fragment">How is this secure?</li>
-						<li class="fragment">It's not</li>
-					</ul>
-
+					<h3 class="fragment">base64(sha1(Sec-WebSocket-Key + GUID))</h3>
+					<h3 class="fragment">Result is set as Sec-WebSocket-Accept</h3>
+					<h3 class="fragment">How is this secure?</h3>
+					<h3 class="fragment">It's not</h3>
 					<aside class="notes">
 						This is actually used to protect non-websocket servers from cross-protocol attacts. So what are those?
 					</aside>
@@ -482,11 +438,9 @@ Sec-WebSocket-Accept: lluo2AIajFdtzn73RnauhvkCOvU=
 
 				<section>
 					<h1>Protocol Attack</h1>
-					<ul>
-						<li class="fragment">Protect non WebSocket servers</li>
-						<li class="fragment">Prevents the browser from opening connection using WebSocket object</li>
-						<li class="fragment">Browser will kill connection if Sec-WebSocket-Accept is not correct</li>
-					</ul>
+					<h3 class="fragment">Protect non WebSocket servers</h3>
+					<h3 class="fragment">Prevents the browser from opening connection using WebSocket object</h3>
+					<h3 class="fragment">Browser will kill connection if Sec-WebSocket-Accept is not correct</h3>
 
 					<aside class="notes">
 						For example, this could be a request crafted and sent from a browser. It would have the correct handshake header
@@ -525,12 +479,10 @@ var ws = new WebSocket("ws://localhost:80/app", "custom.protocol");
 
 				<section>
 					<h1>Events</h1>
-					<ul>
-						<li class="fragment">Open</li>
-						<li class="fragment">Message</li>
-						<li class="fragment">Error</li>
-						<li class="fragment">Close</li>
-					</ul>
+					<h3 class="fragment">Open</h3>
+					<h3 class="fragment">Message</h3>
+					<h3 class="fragment">Error</h3>
+					<h3 class="fragment">Close</h3>
 					<aside class="notes">
 						Event driven/async/"real-time"
 						WC3.
@@ -588,10 +540,8 @@ ws.onmessage = function(e) {
     console.log(e.data);
 }
 					</code></pre>
-					<ul>
-						<li class="fragment">string</li>
-						<li class="fragment">binary</li>
-					</ul>
+					<h3 class="fragment">string</h3>
+					<h3 class="fragment">binary</h3>
 					<aside class="notes">
 					</aside>
 				</section>
@@ -614,9 +564,6 @@ if(e.data instanceof Blob) {
     ...
 }
 					</code></pre>
-					<ul>
-						<li class="fragment">Suitable for file like objects(images)</li>
-					</ul>
 					<aside class="notes">
 					</aside>
 				</section>
@@ -629,9 +576,6 @@ if(e.data instanceof ArrayBuffer) {
     ...
 }
 					</code></pre>
-					<ul>
-						<li class="fragment">Suitable when you need to process/split</li>
-					</ul>
 					<aside class="notes">
 					fixed-length binary data buffer.ArrayBufferView objects which can present the contents of the buffer in a specific format.
 					</aside>
@@ -644,10 +588,8 @@ var ws = new WebSocket("ws://localhost:80/app");
     ws.send("some data");
 }
 					</code></pre>
-					<ul>
-						<li class="fragment">string</li>
-						<li class="fragment">binary</li>
-					</ul>
+					<h3 class="fragment">string</h3>
+					<h3 class="fragment">binary</h3>
 					<aside class="notes">
 					Will be sent as a TextFrame
 					</aside>
@@ -675,11 +617,9 @@ var ws = new WebSocket("ws://localhost:80/app");
     }
 }
 					</code></pre>
-					<ul>
-						<li class="fragment">number of bytes that have been queued</li>
-						<li class="fragment">but not transmitted to the network yet</li>
-						<li class="fragment">can be used to throttle</li>
-					</ul>
+					<h3 class="fragment">Number of bytes that have been queued</h3>
+					<h3 class="fragment">But not transmitted to the network yet</h3>
+					<h3 class="fragment">Can be used to throttle</h3>
 					<aside class="notes">
 					Number of bytes queued up but not yet been transmitted to the network.
 					</aside>
@@ -687,11 +627,9 @@ var ws = new WebSocket("ws://localhost:80/app");
 
 				<section>
 					<h1>Masking</h1>
-					<ul>
-						<li class="fragment">Required for client frames</li>
-						<li class="fragment">Obfuscate payload</li>
-						<li class="fragment">Target of attack is web infrastructure</li>
-					</ul>
+					<h3 class="fragment">Required for client frames</h3>
+					<h3 class="fragment">Obfuscate payload</h3>
+					<h3 class="fragment">Target of attack is web infrastructure</h3>
 					<aside class="notes">
 						Masking is done to prevent cross-protocol attacks when an intermediate is in the picture. 
 						For example, if there is a transparent/intercepting proxy in the communication path the first WebSocket upgrade might succeed and a WebSocket connection established. 
@@ -709,10 +647,8 @@ var ws = new WebSocket("ws://localhost:80/app");
 
 				<section>
 					<h1>Example attack</h1>
-					<ul>
-						<li class="fragment">Client and server understand WebSocket</li>
-						<li class="fragment">Transparent proxy in the middle</li>
-					</ul>
+					<h3 class="fragment">Client and server understand WebSocket</h3>
+					<h3 class="fragment">Transparent proxy in the middle</h3>
 					</code></pre>
 					<aside class="notes">
 					Example if masking was not used.
@@ -724,14 +660,9 @@ var ws = new WebSocket("ws://localhost:80/app");
 					<pre><code data-trim contenteditable>
 var ws = new WebSocket("ws://server.com:80/app");
 					</code></pre>
-					<ul>
-						<li class="fragment">Upgrade request succeeds (plain HTTP)</li>
-						<li class="fragment">Client has a connection to proxy</li>
-						<li class="fragment">WebSocket server will never get data</li>
-						<ul>
-							<li class="fragment">But the server is not the subject of the attack</li>
-						</ul>
-					</ul>
+					<h3 class="fragment">Upgrade request succeeds (plain HTTP)</h3>
+					<h3 class="fragment">Client has a connection to proxy</h3>
+					<h3 class="fragment">Server is not the target of the attack</h3>
 					<aside class="notes">
 					</aside>
 				</section>
@@ -741,16 +672,11 @@ var ws = new WebSocket("ws://server.com:80/app");
 					<pre><code data-trim contenteditable>
 ws.send("GET /clickcounter.html HTTP/1.1\r\nHOST: www.bad.com\r\n");
 					</code></pre></p>
-					<ul>
-						<li class="fragment">Client crafts a HTTP request</li>
-						<li class="fragment">Proxy could interpret as HTTP request</li>
-						<li class="fragment">Proxy routes using HOST header</li>
-						<ul>
-							<li class="fragment">Possible IP-hijacking</li>
-							<li class="fragment">Possible access to internal servers</li>
-						</ul>
-						<li class="fragment">Masking prevents the proxy from interpreting</li>
-					</ul>
+					<h3 class="fragment">Client crafts a HTTP request</h3>
+					<h3 class="fragment">Proxy could interpret as HTTP request</h3>
+					<h3 class="fragment">Proxy routes using HOST header</h3>
+					<h3 class="fragment">IP-hijacking</h3>
+					<h3 class="fragment">Access to internal servers</h3>
 					<aside class="notes">
 					</aside>
 				</section>
@@ -760,18 +686,12 @@ ws.send("GET /clickcounter.html HTTP/1.1\r\nHOST: www.bad.com\r\n");
 					<pre><code data-trim contenteditable>
 ws.send("GET /index.html HTTP/1.1\r\nHOST: www.good.com\r\n");
 					</code></pre></p>
-					<ul>
-						<li class="fragment">Client crafts a HTTP request</li>
-						<li class="fragment">Caching proxy could interpret as HTTP request</li>
-						<li class="fragment">Proxy routes using ip address</li>
-						<li class="fragment">Server response with HTTP Expires header</li>
-						<li class="fragment">Proxy caches based on HOST header</li>
-						<li class="fragment">Request for 'http://www.good.com/index.html'</li>
-						<ul>
-							<li class="fragment">Proxy returns our poisoned resource</li>
-						</ul>
-						<li class="fragment">Masking prevents the proxy from interpreting</li>
-					</ul>
+					<h3 class="fragment">Client crafts a HTTP request</h3>
+					<h3 class="fragment">Caching proxy could interpret as HTTP request</h3>
+					<h3 class="fragment">Proxy routes using ip address</h3>
+					<h3 class="fragment">Server response with HTTP Expires header</h3>
+					<h3 class="fragment">Proxy caches based on HOST header</h3>
+					<h3 class="fragment">Request for 'http://www.good.com/index.html'</h3>
 					<aside class="notes">
 					* Proxy will route the reqest to our malicious server
 					* Server will response with a HTTP Expires header so it will be cached
@@ -789,10 +709,8 @@ ws.send("GET /index.html HTTP/1.1\r\nHOST: www.good.com\r\n");
 
 				<section>
 					<h1>WebSocket Protocol</h1>
-					<ul>
-						<li class="fragment">Minimal framing</li>
-						<li class="fragment">Layer on top of TCP</li>
-					</ul>
+					<h3 class="fragment">Minimal framing</h3>
+					<h3 class="fragment">Layer on top of TCP</h3>
 					<aside class="notes">
 					</aside>
 				</section>
@@ -869,13 +787,11 @@ ws.send("testing");
 
 				<section>
 					<h1>Types of frames</h1>
-					<ul>
-						<li class="fragment">Text</li>
-						<li class="fragment">Binary</li>
-						<li class="fragment">Close</li>
-						<li class="fragment">Ping</li>
-						<li class="fragment">Pong</li>
-					</ul>
+					<h3 class="fragment">Text</h3>
+					<h3 class="fragment">Binary</h3>
+					<h3 class="fragment">Close</h3>
+					<h3 class="fragment">Ping</h3>
+					<h3 class="fragment">Pong</h3>
 					<aside class="notes">
 					So we've seen some of the client API and perhaps understand a little more about the initial handshake.
 					Lets take a look at the WebSocket Protocol now.
@@ -885,31 +801,25 @@ ws.send("testing");
 
 				<section>
 				<img width="420" height="514" src="img/pingpong.png" alt="Ping/Pong"></br>
-					<ul>
-						<li class="fragment">Can be sent by both the server and the browser</li>
-						<li class="fragment">Currently not available in API</li>
-					</ul>
+					<h3 class="fragment">Can be sent by both the server and the browser</h3>
+					<h3 class="fragment">Currently not available in API</h3>
 					<aside class="notes">
 					</aside>
 				</section>
 
 				<section>
 					<h1>Extensions</h1>
-					<ul>
-						<li class="fragment">Extend the WebSocket protocol</li>
-						<li class="fragment">Can add new op codes and data fields to the frame</li>
-						<li class="fragment">Browser and server must support</li>
-					</ul>
+					<h3 class="fragment">Extend the WebSocket protocol</h3>
+					<h3 class="fragment">Can add new op codes and data fields to the frame</h3>
+					<h3 class="fragment">Browser and server must support</h3>
 					<aside class="notes">
 					</aside>
 				</section>
 
 				<section>
 					<h1>mux</h1>
-					<ul>
-						<li class="fragment">Share a TCP connection</li>
-						<li class="fragment">Sec-WebSocket-Extensions: <a href="http://tools.ietf.org/html/draft-ietf-hybi-websocket-multiplexing-01">mux</a></li>
-					</ul>
+					<h3 class="fragment">Share a TCP connection</h3>
+					<h3 class="fragment">Sec-WebSocket-Extensions: <a href="http://tools.ietf.org/html/draft-ietf-hybi-websocket-multiplexing-01">mux</a></h3>
 					<aside class="notes">
 					With this extension, one TCP connection can provide multiple virtual 
 
@@ -921,10 +831,8 @@ ws.send("testing");
 
 				<section>
 					<h1>deflate-frame</h1>
-					<ul>
-						<li class="fragment">Sec-WebSocket-Extensions: <a href="http://tools.ietf.org/html/draft-tyoshino-hybi-websocket-perframe-deflate-06">deflate-frame</a></li>
-						<li class="fragment">Compresses the application data</li>
-					</ul>
+					<h3 class="fragment">Sec-WebSocket-Extensions: <a href="http://tools.ietf.org/html/draft-tyoshino-hybi-websocket-perframe-deflate-06">deflate-frame</a></h3>
+					<h3 class="fragment">Compresses the application data</h3>
 					<aside class="notes">
 					 There was a previous extentension named 'deflate-stream' which compressed the entire frame. This was later removed/deprecated.
 					</aside>
@@ -932,11 +840,9 @@ ws.send("testing");
 
 				<section>
 					<h1>Proxies</h1>
-					<ul>
-						<li class="fragment">Might not understand WebSocket</li>
-						<li class="fragment">Might not handle Upgrade requests</li>
-						<li class="fragment">Use TLS</li>
-					</ul>
+					<h3 class="fragment">Might not understand WebSocket</h3>
+					<h3 class="fragment">Might not handle Upgrade requests</h3>
+					<h3 class="fragment">Use TLS</h3>
 					<aside class="notes">
 						Most proxies are not equipped to handle the 'upgraded' connection and either drop the connection because of an 'illegal' request or don't 
 						forward the upgrade header and the application isn't able to process the request.
@@ -945,10 +851,8 @@ ws.send("testing");
 
 				<section>
 					<h1>Fallbacks/Polyfills</h1>
-					<ul>
-						<li class="fragment">SockJS</li>
-						<li class="fragment">socket.io</li>
-					</ul>
+					<h3 class="fragment">SockJS</h3>
+					<h3 class="fragment">socket.io</h3>
 					<aside class="notes">
 						Hopefully this project will die as WebSockets are implemented in all browsers.
 						SockJS has the same API as WebSocket so it is a simple change.
@@ -961,9 +865,7 @@ ws.send("testing");
 
 				<section>
 					<h1>Multiplex WebSockets</h1>
-					<ul>
-						<li class="fragment">Multiple logic WebSocket connections over same physical connection</li>
-					</ul>
+					<h3 class="fragment">Multiple logic WebSocket connections over same physical connection</h3>
 					<aside class="notes">
 					  MUX multiple logical websocket connections over same connection.
 					</aside>
@@ -971,13 +873,9 @@ ws.send("testing");
 
 				<section>
 					<h1>HTTP 2.0</h1>
-					<ul>
-						<li class="fragment">Faster handshake</li>
-						<li class="fragment">Google are working on multiplexing WebSocket over SPDY</li>
-						<ul>
-							<li class="fragment">WebSocket and REST over same connection</li>
-						</ul>
-					</ul>
+					<h3 class="fragment">Faster handshake</h3>
+					<h3 class="fragment">Google are working on multiplexing WebSocket over SPDY</h3>
+					<h3 class="fragment">WebSocket and REST over same connection</h3>
 					<aside class="notes">
 					  Google are working on multiplexing WebSockets over SPDY. Will this added overhead to the protocol?
 					</aside>
@@ -985,10 +883,8 @@ ws.send("testing");
 
 				<section>
 					<h1>HTTP 2.0 and SSE</h1>
-					<ul>
-						<li class="fragment">Back to pure HTTP using SSE for server push</li>
-						<li class="fragment">Use normal REST for sending</li>
-					</ul>
+					<h3 class="fragment">Back to pure HTTP using SSE for server push</h3>
+					<h3 class="fragment">Use normal REST for sending</h3>
 					<aside class="notes">
 					  Perhaps with HTTP2.0 and SSE we could go back to using pure HTTP and use SSE for server push and normal REST for sending?
 					</aside>
@@ -996,14 +892,12 @@ ws.send("testing");
 
 				<section>
 					<h1>Server Sent Events</h1>
-					<ul>
-						<li class="fragment">HTTP 1.1</li>
-						<li class="fragment">Client initiated</li>
-						<li class="fragment">Event based</li>
-						<li class="fragment">Native to browser (where supported)</li>
-						<li class="fragment">Polyfill available</li>
-						<li class="fragment">Alternative if only server -> client needed</li>
-					</ul>
+					<h3 class="fragment">HTTP 1.1</h3>
+					<h3 class="fragment">Client initiated</h3>
+					<h3 class="fragment">Event based</h3>
+					<h3 class="fragment">Native to browser (where supported)</h3>
+					<h3 class="fragment">Polyfill available</h3>
+					<h3 class="fragment">Alternative if only server -> client needed</h3>
 					<aside class="notes">
 						An option that exist today is also Server Sent Events which are native to browsers that support them and use HTTP/1.1.
 						Just to make people aware that they don't have to use WebSocket if a simple solution is available.
