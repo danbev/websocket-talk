@@ -174,6 +174,7 @@
 					<ul>
 						<li class="fragment">chat/messaging</li>
 						<li class="fragment">games</li>
+						<li class="fragment">collaboration</li>
 					</ul>
 					<aside class="notes">
 						There are certain types of application functionality that do not fit in nicely with the request/response paradigm of the web.
@@ -196,20 +197,20 @@
 
 				<section>
 					<p>
-						<img width="460" height="276" src="img/comet.jpg" alt="Comet/Ajax">
+						<img width="460" height="276" src="img//ajax-comet.jpeg" alt="Comet/Ajax">
 					</p>
 					<aside class="notes">
+						(Asynchronous JavaScript and XML)
+						With Ajax, web applications can send data to, and retrieve data from, a server asynchronously (in the background) without interfering with the display (no page reload).
+
 						Comet is a web application model in which a long-held HTTP request allows a web server to push data to a browser, without the browser explicitly requesting it
 						Is also know as Ajax Push, Reverse Ajax, Two-way-web, HTTP Streaming.
 						The new term was a play on Ajax (Ajax and Comet both being household cleaners common in the USA).
-
-						(Asynchronous JavaScript and XML)
-						With Ajax, web applications can send data to, and retrieve data from, a server asynchronously (in the background) without interfering with the display (no page reload).
 					</aside>
 				</section>
 
 				<section>
-					<h1>HTTP "Short" Polling</h1>
+					<h1>"Short" Polling</h1>
 					<ul>
 						<li class="fragment">Polls server using an interval</li>
 						<li class="fragment">Might poll unnecessarily</li>
@@ -228,7 +229,7 @@
 				</section>
 
 				<section>
-					<h1>HTTP Long polling</h1>
+					<h1>Long polling</h1>
 					<ul>
 						<li class="fragment">Server responds when data is available</li>
 						<li class="fragment">Client polls again</li>
@@ -240,7 +241,7 @@
 				</section>
 
 				<section>
-					<h1>HTTP Streaming</h1>
+					<h1>Streaming</h1>
 					<ul>
 						<li class="fragment">Maintains an open connection to server</li>
 						<li class="fragment">HTTP/1.1 chunks</li>
@@ -268,32 +269,6 @@
 					</aside>
 				</section>
 
-				<section>
-					<h1>Server Sent Events</h1>
-					<ul>
-						<li class="fragment">HTTP 1.1</li>
-						<li class="fragment">Client initiated</li>
-						<li class="fragment">Event based</li>
-						<li class="fragment">Native to browser (where supported)</li>
-						<li class="fragment">Polyfill available</li>
-						<li class="fragment">Alternative if only server -> client needed</li>
-					</ul>
-					<aside class="notes">
-						An option that exist today is also Server Sent Events which are native to browsers that support them and use HTTP/1.1.
-						Just to make people aware that they don't have to use WebSocket if a simple solution is available.
-						This allows for unidirectional communication of data/events from the server. 
-						The impl/browser will take care for reconnects.
-					    Might be nice if there is no need to send back to the server, like a news feed, stock ticker.	
-
-						var source = new EventSource('/newsfeed');
-						source.addEventListener('message', function(e) {
-						  console.log(e.data);
-						}, false);
-						Server uses "Content-Type: text/event-stream".
-						If the URL passed to the EventSource constructor is an absolute URL, its origin (scheme, domain, port) must match that of the calling page.
-						You could have a servlet that serves 'newsfeed'. Although not in the standard yet support for CORS is coming.
-					</aside>
-				</section>
 
 				<section>
 					<h1>What do we want?</h1>
@@ -310,9 +285,9 @@
 				<section>
 					<h1>Solution: WebSocket</h1>
 					<ul>
-						<li class="fragment">Layer on top of TCP</li>
-						<li class="fragment">Origin based security model</li>
-						<li class="fragment">Addressing and protocol naming machanism</li>
+						<li class="fragment">Layered on top of TCP</li>
+						<li class="fragment">Bidirectional full duplex</li>
+						<li class="fragment">Works with port 80/443</li>
 					</ul>
 					<aside class="notes">
 						It's also designed in such a way that its servers can share a port with HTTP servers, by having its handshake be a valid HTTP Upgrade request.
@@ -323,17 +298,20 @@
 				<section>
 					<h1>TCPConnection</h1>
 					<ul>
-						<li class="fragment">Ian Hickson</li>
+						<li class="fragment">2007, Ian Hickson</li>
 						<li class="fragment">Specifications/Drafts</li>
 						<ul>
-							<li class="fragment">Hixie-</li>
+							<li class="fragment">Hixie-75, Hixie-76</li>
 							<ul>
 								<li class="fragment">Ian <strong>"Hixie"</strong> Hickson</li>
 							</ul>
-							<li class="fragment">Hybi-</li>
+							<li class="fragment">Hybi-00, Hybi-17</li>
 							<ul>
 								<li class="fragment"><strong>Hy</strong>pertext <strong>bi</strong>-directional</li>
-								<li class="fragment"><a href="https://datatracker.ietf.org/wg/hybi/">BiDirectional or Server-Initiated HTTP working group</a></li>
+								<li class="fragment">Internet Engineering Task Force</li>
+								<ul>
+									<li class="fragment"><a href="https://datatracker.ietf.org/wg/hybi/">BiDirectional or Server-Initiated HTTP working group</a></li>
+								</ul>
 							</ul>
 						</ul>
 					</ul>
@@ -344,6 +322,8 @@
 						7 Hybi-07 April 22 2011 Firefox 6.
 						8 Hybi-10 July 11 2011  Firefox 7, Firefox(Android) 7, Chrome 14, 
 						13 RFC-6455 IE 10, Firefox 11, Firefox(Android) 11, Chrome 16, Safari 6, Opera 12.01
+						draft-ietf-hybi-thewebsocketprotocol-17 Version 13 = RFC-6455
+						
 						Note that the native Android browser does not support WebSockets.
 
 						Hixie stems from the Ian "Hixie" Hicksson how came up with the TCPConnection
@@ -353,6 +333,10 @@
 
 				<section>
 					<h1>API and Protocol</h1>
+					<ul>
+						<li class="fragment">API from W3C</li>
+						<li class="fragment">Protocol from IETF</li>
+					</ul>
 					<aside class="notes">
 						When discussing WebSockets there is the protcol that is provided by the IETF(Internet Engineering Task Force) and 
 						the WebSocket API from WC3 (World Wide Web Consortium).
@@ -362,7 +346,7 @@
 				<section>
 					<h1>WebSocket API</h1>
 					<ul>
-						<li class="fragment">Event driven</li>
+						<li class="fragment">Simple event driven</li>
 					</ul>
 					<aside class="notes">
 						WC3.
@@ -421,6 +405,8 @@ Sec-WebSocket-Key: r/9y5eS3shxHilVx0fVBcA==
 						The 'Upgrade' header is hop-by-hop, it is/should not passed through proxies. 
 						By specifying 'Connection: upgrade' proxies are forced to parse this header and remove any headers listed. 'Connection' is for this connection only not 
 						for the end-to-end connection.
+						The Upgrade header field only applies to the immediate connection. Therefore, the upgrade keyword MUST be supplied within a Connection header field
+
 
 						Connection
 						HTTP/1.1 proxies MUST parse the Connection header field before a message is forwarded and, for each connection-token in this field, remove any header 
@@ -433,11 +419,6 @@ Sec-WebSocket-Key: r/9y5eS3shxHilVx0fVBcA==
 						* The proxy server handles the response from the server and "forwards" it back to the client. For the client this looks like a successful upgrade to a WebSocket.
 						* When the client tries to send using the web socket, the proxy server will not know how to handle it, it will not look like a HTTP request, and 
 						will most probably be dropped or an error returned and the connection closed.
-
-						Sec-WebSocket-Version
-						Although draft versions of this document (-09, -10, -11, and -12) were posted (they were mostly comprised of editorial changes and clarifications and not 
-						changes to the wire protocol), values 9, 10, 11, and 12 were not used as valid values for Sec-WebSocket-Version. These values were reserved in the IANA 
-						registry but were not and will not be used.
 
 						Protocol version:
 						Hixie-75 Feb 4 2010  Chrome 4 and Safari 5.0.0
@@ -513,8 +494,7 @@ Sec-WebSocket-Accept: lluo2AIajFdtzn73RnauhvkCOvU=
 						Instead the target server would running a different protocol and by having the browser send this request might
 						get that server to take action. But to actually send data to that server a connection would first have to be established.
 						But a server that does not understand WebSocket would not respond with the correct Sec-WebSocket-Accept header and hence the
-						browser will close the connection.
-						So this is only to cover this particular issue. 
+						browser will close the connection. So this is only to cover this particular issue. 
 					</aside>
 				</section>
 
@@ -532,6 +512,7 @@ var ws = new WebSocket("ws://localhost:80/app", "custom.protocol");
 						<li class="fragment">Custom</li>
 					</ul>
 					<aside class="notes">
+						Simple or Streaming Text Oriented Messaging Protocol
 						The connection will only be established if the server reports that it has selected one of these subprotocols.
 						Internet Assigned Numbers Authority.
 						The WebSocket protocol does not have any headers or metadata and if such metadata is required the client and the
@@ -561,7 +542,7 @@ var ws = new WebSocket("ws://localhost:80/app", "custom.protocol");
 					<pre><code data-trim contenteditable>
 var ws = new WebSocket("ws://localhost:80/app");
 ws.onopen = function() {
-    console.log("opened connection");
+    console.log("Handshake completed. Connection open");
 }
 					</code></pre>
 				</section>
@@ -691,6 +672,7 @@ var ws = new WebSocket("ws://localhost:80/app");
 					<h1>Masking</h1>
 					<ul>
 						<li class="fragment">Client frames only</li>
+						<li class="fragment">Subject of attack web infrastructure</li>
 					</ul>
 					<aside class="notes">
 						Masking is done to prevent cross-protocol attacks when an intermediate is in the picture. 
@@ -698,7 +680,7 @@ var ws = new WebSocket("ws://localhost:80/app");
 						But if the WebSocket client crafted a TextFrame that looks like a HTTP request this could be interpreted by the proxy as a HTTP request and acted upon. 
 
 						Lets say that the protocol did not use masking. The initial handshake goes as planned but the intermediate does not understand the websocket protocol.
-						The client thinks that it was a connection open (which is now does to the proxy server) but instead of sending "normal" data it sends what resembles
+						The client thinks that it was a ws connection open (which is now does to the proxy server) but instead of sending "normal" data it sends what resembles
 						a HTTP request:
 						GET /sensitive-document HTTP/1.1
 						Host: somehost.com
@@ -710,8 +692,8 @@ var ws = new WebSocket("ws://localhost:80/app");
 				<section>
 					<h1>Example attack</h1>
 					<ul>
-						<li class="fragment">Client and Server understand WebSocket</li>
-						<li class="fragment">Transparent Proxy in the middle does not</li>
+						<li class="fragment">Client and server understand WebSocket</li>
+						<li class="fragment">Transparent proxy in the middle</li>
 					</ul>
 					</code></pre>
 					<aside class="notes">
@@ -728,7 +710,7 @@ var ws = new WebSocket("ws://localhost:80/app");
 						<li class="fragment">Client has a connection to proxy</li>
 						<li class="fragment">WebSocket server will never get data</li>
 						<ul>
-							<li class="fragment">But the server is not the target of the attack</li>
+							<li class="fragment">But the server is not the subject of the attack</li>
 						</ul>
 					</ul>
 					<aside class="notes">
@@ -743,13 +725,36 @@ ws.send("GET /clickcounter.html HTTP/1.1\r\nHOST: www.bad.com\r\n");
 					<ul>
 						<li class="fragment">Client crafts a HTTP request</li>
 						<li class="fragment">Proxy could interpret as HTTP request</li>
-						<li class="fragment">Proxy route using HOST header</li>
+						<li class="fragment">Proxy routes using HOST header</li>
 						<ul>
 							<li class="fragment">Possible IP-hijacking</li>
-							<li class="fragment">Possible proxy cache poising</li>
+							<li class="fragment">Possible access to internal servers</li>
 						</ul>
 					</ul>
 					<aside class="notes">
+					</aside>
+				</section>
+
+				<section>
+					<h1>Cache poisoning</h1>
+					<pre><code data-trim contenteditable>
+ws.send("GET /index.html HTTP/1.1\r\nHOST: www.good.com\r\n");
+					</code></pre></p>
+					<ul>
+						<li class="fragment">Client crafts a HTTP request</li>
+						<li class="fragment">Caching proxy could interpret as HTTP request</li>
+						<li class="fragment">Proxy routes using ip address</li>
+						<li class="fragment">Server response with HTTP Expires header</li>
+						<li class="fragment">Proxy caches based on HOST header</li>
+						<li class="fragment">Request for 'http://www.good.com/index.html'</li>
+						<ul>
+							<li class="fragment">Proxy returns our poisoned resource</li>
+						</ul>
+					</ul>
+					<aside class="notes">
+					* Proxy will route the reqest to our malicious server
+					* Server will response with a HTTP Expires header so it will be cached
+					* When someone request http://www.good.com/index.html they will get the malicious content.
 					</aside>
 				</section>
 
@@ -795,17 +800,14 @@ var ws = new WebSocket("ws://localhost:80/app");
 					<ul>
 						<li class="fragment">Minimal framing</li>
 						<li class="fragment">Layer on top of TCP</li>
-						<li class="fragment">Origin (browsers)</li>
 					</ul>
 					<aside class="notes">
 					</aside>
 				</section>
 
 				<section>
-					<h1>WebSocket Wire Format</h1>
-					<pre>
-0                   1                   2                   3
-0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+					<h1>Wire format</h1>
+					<pre><code data-trim> 
 +-+-+-+-+-------+-+-------------+-------------------------------+
 |F|R|R|R| opcode|M| Payload len |    Extended payload length    |
 |I|S|S|S|  (4)  |A|     (7)     |             (16/64)           |
@@ -821,7 +823,7 @@ var ws = new WebSocket("ws://localhost:80/app");
 :                     Payload Data continued ...                :
 + - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - +
 |                     Payload Data continued ...                |
-+---------------------------------------------------------------+</pre>
++---------------------------------------------------------------+</code></pre>
 					<aside class="notes">
 					 The first byte contain:
 					 0 = FIN 	-> is this the final fragment?
@@ -849,6 +851,24 @@ var ws = new WebSocket("ws://localhost:80/app");
 					 Masking key: 4 bytes. 32 bit random value used with client to server masking.
 					 Payload data.
 					</aside>
+				</section>
+
+				<section>
+					<h1>Frame example</h1>
+					<pre><code data-trim contenteditable>
+ws.send("testing");
+					</code></pre>
+					<ul>
+						<li class="fragment">10000001</li>
+						<ul>
+							<li class="fragment">fin 1 and opcode 1 (text)</li>
+						</ul>
+						<li class="fragment">10000111</li>
+						<ul>
+							<li class="fragment">mask 1 and lenght (7)</li>
+						</ul>
+						<li class="fragment">Next 4 bytes the mask</li>
+					</ul>
 				</section>
 
 				<section>
@@ -974,6 +994,33 @@ var ws = new WebSocket("ws://localhost:80/app");
 					</ul>
 					<aside class="notes">
 					  Perhaps with HTTP2.0 and SSE we could go back to using pure HTTP and use SSE for server push and normal REST for sending?
+					</aside>
+				</section>
+
+				<section>
+					<h1>Server Sent Events</h1>
+					<ul>
+						<li class="fragment">HTTP 1.1</li>
+						<li class="fragment">Client initiated</li>
+						<li class="fragment">Event based</li>
+						<li class="fragment">Native to browser (where supported)</li>
+						<li class="fragment">Polyfill available</li>
+						<li class="fragment">Alternative if only server -> client needed</li>
+					</ul>
+					<aside class="notes">
+						An option that exist today is also Server Sent Events which are native to browsers that support them and use HTTP/1.1.
+						Just to make people aware that they don't have to use WebSocket if a simple solution is available.
+						This allows for unidirectional communication of data/events from the server. 
+						The impl/browser will take care for reconnects.
+					    Might be nice if there is no need to send back to the server, like a news feed, stock ticker.	
+
+						var source = new EventSource('/newsfeed');
+						source.addEventListener('message', function(e) {
+						  console.log(e.data);
+						}, false);
+						Server uses "Content-Type: text/event-stream".
+						If the URL passed to the EventSource constructor is an absolute URL, its origin (scheme, domain, port) must match that of the calling page.
+						You could have a servlet that serves 'newsfeed'. Although not in the standard yet support for CORS is coming.
 					</aside>
 				</section>
 
