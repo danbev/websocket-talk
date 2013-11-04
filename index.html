@@ -157,7 +157,7 @@
 					<ul>
 						<li class="fragment">Half duplex</li>
 						<li class="fragment">Request initiated from client</li>
-						<li class="fragment">Server respons</li>
+						<li class="fragment">Server response</li>
 						<li class="fragment">Has worked well</li>
 					</ul>
 					<aside class="notes">
@@ -543,6 +543,8 @@ var ws = new WebSocket("ws://localhost:80/app", "custom.protocol");
 var ws = new WebSocket("ws://localhost:80/app");
 ws.onopen = function() {
     console.log("Handshake completed. Connection open");
+    console.log(ws.protocol);
+    console.log(ws.extensions);
 }
 					</code></pre>
 				</section>
@@ -658,10 +660,6 @@ var ws = new WebSocket("ws://localhost:80/app");
     ws.send(new Blob("some data"));
 }
 					</code></pre>
-					<ul>
-						<li class="fragment">Asynchronous</li>
-						<li class="fragment">Data queued by client</li>
-					</ul>
 					<aside class="notes">
 					Will be sent as a BinaryFrame
 					It is also possible to send/receive an ArrayBuffer
@@ -669,10 +667,30 @@ var ws = new WebSocket("ws://localhost:80/app");
 				</section>
 
 				<section>
+					<h1>bufferedAmount</h1>
+					<pre><code data-trim contenteditable>
+var ws = new WebSocket("ws://localhost:80/app");
+    if (sockjs.bufferedAmount === 0) {
+         ws.send("some data");
+    }
+}
+					</code></pre>
+					<ul>
+						<li class="fragment">number of bytes that have been queued</li>
+						<li class="fragment">but not transmitted to the network yet</li>
+						<li class="fragment">can be used to throttle</li>
+					</ul>
+					<aside class="notes">
+					Number of bytes queued up but not yet been transmitted to the network.
+					</aside>
+				</section>
+
+				<section>
 					<h1>Masking</h1>
 					<ul>
-						<li class="fragment">Client frames only</li>
-						<li class="fragment">Subject of attack web infrastructure</li>
+						<li class="fragment">Required for client frames</li>
+						<li class="fragment">Obfuscate payload</li>
+						<li class="fragment">Target of attack is web infrastructure</li>
 					</ul>
 					<aside class="notes">
 						Masking is done to prevent cross-protocol attacks when an intermediate is in the picture. 
@@ -697,13 +715,14 @@ var ws = new WebSocket("ws://localhost:80/app");
 					</ul>
 					</code></pre>
 					<aside class="notes">
+					Example if masking was not used.
 					</aside>
 				</section>
 
 				<section>
 					<h1>Example attack cont</h1>
 					<pre><code data-trim contenteditable>
-var ws = new WebSocket("ws://localhost:80/app");
+var ws = new WebSocket("ws://server.com:80/app");
 					</code></pre>
 					<ul>
 						<li class="fragment">Upgrade request succeeds (plain HTTP)</li>
@@ -730,6 +749,7 @@ ws.send("GET /clickcounter.html HTTP/1.1\r\nHOST: www.bad.com\r\n");
 							<li class="fragment">Possible IP-hijacking</li>
 							<li class="fragment">Possible access to internal servers</li>
 						</ul>
+						<li class="fragment">Masking prevents the proxy from interpreting</li>
 					</ul>
 					<aside class="notes">
 					</aside>
@@ -750,40 +770,12 @@ ws.send("GET /index.html HTTP/1.1\r\nHOST: www.good.com\r\n");
 						<ul>
 							<li class="fragment">Proxy returns our poisoned resource</li>
 						</ul>
+						<li class="fragment">Masking prevents the proxy from interpreting</li>
 					</ul>
 					<aside class="notes">
 					* Proxy will route the reqest to our malicious server
 					* Server will response with a HTTP Expires header so it will be cached
 					* When someone request http://www.good.com/index.html they will get the malicious content.
-					</aside>
-				</section>
-
-				<section>
-					<h1>WebSocket Properties</h1>
-					<pre><code data-trim contenteditable>
-var ws = new WebSocket("ws://localhost:80/app");
-					</code></pre>
-					<ul>
-						<li class="fragment">ws.extensions</li>
-						<li class="fragment">ws.protocol</li>
-						<li class="fragment">ws.bufferedAmount</li>
-						<li class="fragment">ws.binaryType</li>
-					</ul>
-					<aside class="notes">
-					 The WebSocket instance has a number of properties:
-
-					 extensions:
-					 The extensions that might have been negotiated. Will be available in onopen if set and otherwise null.
-
-					 protocol: 
-					 the protcol that was settled upon. Will be available in onopen if set and null.
-
-					 bufferedAmount:
-					 Amount of data buffered for transmission to the server, particularly if the client application transports large amounts of data to the server. 
-					 Even though calling send() is instant, actually transmitting that data over the Internet is not. 
-
-					 binaryType:
-					 Determines how binary data is exposed to scripts. Can either be "blob" or "arrayBuffer"
 					</aside>
 				</section>
 
@@ -859,15 +851,19 @@ var ws = new WebSocket("ws://localhost:80/app");
 ws.send("testing");
 					</code></pre>
 					<ul>
-						<li class="fragment">10000001</li>
+						<li class="fragment"><span style="color:white">1</span><span style="color:blue">000</span><span style="color:green">0001</span></li>
 						<ul>
-							<li class="fragment">fin 1 and opcode 1 (text)</li>
+							<li class="fragment"><span style="color:white">fin 1</span></li>
+							<li class="fragment"><span style="color:blue">rsv1, rsv2, rsv3</span></li>
+							<li class="fragment"><span style="color:green">opcode 1 (text)</span></li>
 						</ul>
-						<li class="fragment">10000111</li>
+						<li class="fragment"><span style="color:yellow">1</span><span style="color:brown">0000111</span></li>
 						<ul>
-							<li class="fragment">mask 1 and lenght (7)</li>
+							<li class="fragment"><span style="color:yellow">mask 1</span></li>
+							<li class="fragment"><span style="color:brown">lenght (7)</span></li>
 						</ul>
 						<li class="fragment">Next 4 bytes the mask</li>
+						<li class="fragment">Payload data</li>
 					</ul>
 				</section>
 
@@ -909,7 +905,7 @@ ws.send("testing");
 				</section>
 
 				<section>
-					<h1>Extensions: mux</h1>
+					<h1>mux</h1>
 					<ul>
 						<li class="fragment">Share a TCP connection</li>
 						<li class="fragment">Sec-WebSocket-Extensions: <a href="http://tools.ietf.org/html/draft-ietf-hybi-websocket-multiplexing-01">mux</a></li>
@@ -924,12 +920,13 @@ ws.send("testing");
 				</section>
 
 				<section>
-					<h1>Extensions: compression</h1>
+					<h1>deflate-frame</h1>
 					<ul>
-						<li class="fragment">Sec-WebSocket-Extensions: x-webkit-deflate-frame</li>
+						<li class="fragment">Sec-WebSocket-Extensions: <a href="http://tools.ietf.org/html/draft-tyoshino-hybi-websocket-perframe-deflate-06">deflate-frame</a></li>
+						<li class="fragment">Compresses the application data</li>
 					</ul>
 					<aside class="notes">
-						Chrome sends this extension which will be used if the backend server supports it.
+					 There was a previous extentension named 'deflate-stream' which compressed the entire frame. This was later removed/deprecated.
 					</aside>
 				</section>
 
