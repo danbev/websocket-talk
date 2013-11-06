@@ -91,7 +91,7 @@ Connection closed by foreign host.
 					</code></pre>
 					<aside class="notes">
 						1996 RFC-1945 "informal RFC with common usages"
-						The need for more advanced responses like images, content negotiation,
+						more advanced responses like images, content negotiation,
 						content encoding, character set support, multi-part types, authorization, caching, proxy behaviors, date formats, and more.
 						Requiring a new TCP connection per request imposes a significant performance penalty on HTTP 1.0 (TCP slow start etc)
 						(HTTP/1.0 -> new connection for every request unless 'Connection: keep-alive' is sent. Not part of the 1.0 spec)
@@ -137,8 +137,9 @@ Connection closed by foreign host.
 						There is also pipelining where multiple requests can be send to the server and not have to wait for a response before sending the next request.
 						The advantage is that multiple requests can be sent in one go, saving having to make multiple calls. The server must send back the responses 
 						in the same order though.
+
 						Problems:
-						Depending on the order in which requests are sent, if a request requiring particularly lengthy, processing like a database query, sent relatively 
+						Depending on the order in which requests are sent, if a request requiring particularly lengthy processing, like a database query, sent relatively 
 						early in the pipeline, this could actually cause a degradation in performance because all the other responses have to wait for the 
 						lengthy one to finish before the others can be sent back.
 					</aside>
@@ -240,7 +241,6 @@ setInterval(function() {
 }, 2000);
 					</code></pre>
 					<aside class="notes">
-						* Actually not part of Comet as it only regards "long" polling or streaming solutions.
 						* Continous requests for data from the client to server. 
 						* The server can queue up data/events which are delivered to the client when it polls.
 						* Really just uses Ajax with a polling interval.
@@ -253,10 +253,6 @@ setInterval(function() {
 				<section>
 					<h1>"Short Polling"</h1>
 					<img width="460" height="276" src="img/polling_request.png" alt="Short Polling">
-					<h3 class="fragment">Polls server using an interval</h3>
-					<h3 class="fragment">Might poll unnecessarily</h3>
-					<h3 class="fragment">More network trafic</h3>
-					<h3 class="fragment">Server resources involved to handle each poll</h3>
 				</section>
 
 				<section>
@@ -291,7 +287,7 @@ setInterval(function() {
 					<aside class="notes">
 						* multiple connections required.
 						* Browsers allow at most 6 parallel connections to one hostname, with domain sharding 15+.
-						* a full HTTP Request/Response is used being which means all of the headers.
+						* a full HTTP Request/Response is used which means all of the headers.
 						* More data might be available when polling but will not be available to clients until the next request(poll)
 					</aside>
 				</section>
@@ -382,10 +378,10 @@ var ws = new WebSocket("ws://localhost:80/app");
 					<h3 class="fragment">Browser sends a HTTP Upgrade request</h3>
 					<h3 class="fragment">Will not block</h3>
 					<aside class="notes">
+						* Can use 'ws' or 'wss'. The url to the websocket server.
 						* Browser will create a connection a using HTTP Upgrade request
 						* The same TCP connection that was used for the HTTP request will then be used for the WebSocket communication
 						  as long as the response for the upgrade is successfully verified.
-						* Can use 'ws' or 'wss'. The url to the websocket server.
 					</aside>
 				</section>
 
@@ -420,14 +416,7 @@ Sec-WebSocket-Key: r/9y5eS3shxHilVx0fVBcA==
 						Connection
 						HTTP/1.1 proxies MUST parse the Connection header field before a message is forwarded and, for each connection-token in this field, remove any header 
 						field(s) from the message with the same name as the connection-token.
-						Some proxy servers might not understand the Connection header and not remove the headers listed. Let's say that we send an upgrade request to such a proxy server.
-						Client -> proxy -> server
-						* In this case the client sends the upgrade request to the proxy, expecting a websocket to be create if the upgrade is successful.
-						* The proxy server creates a connection to the target server and forwards the request, including all headers (just copying them).
-						* The server does not know about the proxy but just sees a upgrade request and so handles it. Responding with the correct response and will keep the socket open.
-						* The proxy server handles the response from the server and "forwards" it back to the client. For the client this looks like a successful upgrade to a WebSocket.
-						* When the client tries to send using the web socket, the proxy server will not know how to handle it, it will not look like a HTTP request, and 
-						will most probably be dropped or an error returned and the connection closed.
+						Some proxy servers might not understand the Connection header and not remove the headers listed.
 
 						Protocol version:
 						Hixie-75 Feb 4 2010  Chrome 4 and Safari 5.0.0
@@ -437,15 +426,19 @@ Sec-WebSocket-Key: r/9y5eS3shxHilVx0fVBcA==
 						8 Hybi-10 July 11 2011  Firefox 7, Firefox(Android) 7, Chrome 14, 
 						13 RFC-6455 IE 10, Firefox 11, Firefox(Android) 11, Chrome 16, Safari 6, Opera 12.01
 						Note that the native Android browser does not support WebSockets.
+						The wire protocol does not change for every version of the spec document, so the spec doc is now at 17 but the wire version is 13
 
 						Sec-WebSocket-Key.  
-						Is a random 16 bytes value that is base64 encoded. And used to prevent cross protcol attacks. There is nothing stopping someone from intercepting this
-						header, base64 decoding it and they would have the ran
-						This is really not to prevent attacks on WebSocket servers but instead against non-WebSocket server. If this did not exist, the browser could possibly be
-						tricked into opening a TCP connection (by issuing a forged upgrade request) to a non-websocket server (in this case we have to imagine that there is now
-						Sec-WebSocket-Accept part of the protocol).
+						Random 16 bytes value that is base64 encoded. And used to prevent cross protcol attacks. 
+						There is nothing stopping someone from intercepting this header, base64 decoding it.
+						This is really not to prevent attacks on WebSocket servers but instead against non-WebSocket server. If this did not exist, 
+						the browser could possibly be tricked into opening a TCP connection (by issuing a forged upgrade request) to a non-websocket 
+						server (in this case we have to imagine that there is now Sec-WebSocket-Accept part of the protocol).
+						This also makes sure that a proxy cannot cache a upgrade response (nounce will be random for each handshake).
+						Rememeber that it is the browser that generates the nounce and this is not under the controll of an attacker.
 
-						Several header names are reserved by browsers for platform-level usage in the XMLHttpRequest specification and thus are off-limits for use in applications. 
+						Several header names are reserved by browsers for platform-level usage in the XMLHttpRequest specification and thus are off-limits for use in 
+						applications. 
 						The setRequestHeader(header, value) of the XMLHttpRequest object will terminate if one of these headers are used (see link), among these are:
 						* Connection
 						* Host
@@ -455,10 +448,10 @@ Sec-WebSocket-Key: r/9y5eS3shxHilVx0fVBcA==
 						http://www.w3.org/TR/XMLHttpRequest/#dom-xmlhttprequest-setrequestheader
 
 						These header names include those starting with Sec-, as well as common security-critical headers like referer, host, and cookie.
-						The new headers defined in RFC 6455 are all prefixed with Sec-. These prefixes are so named because the browser is opening WebSocket connections on behalf of applications, 
-						but the low-level, security sensitive parameters in the handshake are off-limits to application code. This effectively locks down upgrade requests so that they can only be 
+						The new headers defined in RFC 6455 are all prefixed with Sec-. These prefixes are so named because the browser is opening WebSocket 
+						connections on behalf of applications, but the low-level, security sensitive parameters in the handshake are off-limits to application code. 
+						This effectively locks down upgrade requests so that they can only be 
 						made through APIs like the WebSocket constructor and not through general HTTP APIs like XMLHttpRequest.
-
 					</aside>
 				</section>
 
@@ -466,11 +459,16 @@ Sec-WebSocket-Key: r/9y5eS3shxHilVx0fVBcA==
 					<h1>HTTP Upgrade response</h1>
 					<pre><code data-trim contenteditable>
 HTTP/1.1 101 Switching Protocols
-Connection: Upgrade
 Upgrade: websocket
+Connection: Upgrade
 Sec-WebSocket-Accept: lluo2AIajFdtzn73RnauhvkCOvU=
 					</code></pre>
 					<h3 class="fragment">Sec-WebSocket-Accept?</h3>
+					<aside class="notes">
+						Again we have Upgrade but this time it's a Response header. 
+						It's still hop-by-hop so the Connection header must contain Upgrade.
+						How about the Sec-WebSocket-Accept?
+					</aside>
 				</section>
 
 				<section>
@@ -478,7 +476,6 @@ Sec-WebSocket-Accept: lluo2AIajFdtzn73RnauhvkCOvU=
 					<h3 class="fragment">base64(sha1(Sec-WebSocket-Key + GUID))</h3>
 					<h3 class="fragment">Result is set as Sec-WebSocket-Accept</h3>
 					<h3 class="fragment">How is this secure?</h3>
-					<h3 class="fragment">It's not</h3>
 					<aside class="notes">
 						Is meant to prevent a caching intermediary from providing a WS-client with an cached WS-server reply without actual interaction with the WS-server.
 					</aside>
@@ -490,6 +487,8 @@ Sec-WebSocket-Accept: lluo2AIajFdtzn73RnauhvkCOvU=
 					<h3 class="fragment">Abuse of WebSocket object</h3>
 
 					<aside class="notes">
+						By having a client send out an encoded random number and having a server give a response that can only be 
+						generated by a WebSocket server, the client can verify that they are indeed talking to a WebSocket server and not to some other kind of server.
 						For example, this could be a request crafted and sent from a browser. It would have the correct handshake header
 						as it would still be using the WebSocket object but the target server would not be a WebSocket server.
 						Instead the target server would running a different protocol and by having the browser send this request might
@@ -805,7 +804,7 @@ ws.send("GET /index.html HTTP/1.1\r\nHOST: www.good.com\r\n");
 					 The third byte contain:
 					 Depends on the value in Payload length. 
 					 If 0-125, that is the payload length.
-					 If 126, the following 2 bytes interpreted as a 16-bit unsigned integer are the payload length.
+					 If 126, the following 2 bytes interpreted as a 16-bit unsigned integer which makes out the payload length.
 					 If 127, the following 8 bytes interpreted as a 64-bit unsigned integer
 					 Masking key: 4 bytes. 32 bit random value used with client to server masking.
 					 Payload data.
@@ -818,9 +817,9 @@ ws.send("GET /index.html HTTP/1.1\r\nHOST: www.good.com\r\n");
 ws.send("testing");
 					</code></pre>
 					<ul>
-						<li class="fragment"><span style="color:white">1</span><span style="color:blue">000</span><span style="color:green">0001</span></li>
+						<li class="fragment"><span style="color:gray">1</span><span style="color:blue">000</span><span style="color:green">0001</span></li>
 						<ul>
-							<li class="fragment"><span style="color:white">fin 1</span></li>
+							<li class="fragment"><span style="color:gray">fin 1</span></li>
 							<li class="fragment"><span style="color:blue">rsv1, rsv2, rsv3</span></li>
 							<li class="fragment"><span style="color:green">opcode 1 (text)</span></li>
 						</ul>
